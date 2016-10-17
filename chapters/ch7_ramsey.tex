@@ -1,0 +1,863 @@
+%!TEX root = ../CombinatoricsNotes.tex
+
+\section{Ramsey Theory}
+\marginnote{``Every sufficiently large system contains a regular subsystem.''}
+
+Consider a two coloring $C: [n]^{(2)}\to \{R,B\}$ where $R$ stands for red and $B$, blue.
+A \defn{regular subsystem} is a subset $X\subset [n]$ such that $c$ restricted to $X^{(2)}$ takes only one value\marginnote{That is, the coloring restricted to $X$ is monochromatic.}.
+The \defn{Ramsey number} $R(k,\ell)$ is the minimum number $n$ such that for every $c: [n]^{(2)} \to \{R,B\}$, there exists $X\subset[n]$ such that either
+\begin{itemize}
+	\item $c$ restricted to $X^{(2)}$ is identically $R$ and $|X|=k$, or
+	\item \ditto{$c$ restricted to $X^{(2)}$ is identically} $B$ and $|X| = \ell$.
+\end{itemize}
+\begin{remark}
+The existence of Ramsey numbers was first shown by Frank Ramsey (\cite{ramsey1930problem}), as a lemma to proving the decidability of a class of formulas in first order logic. Here, we will present a short proof by \erdos  and Szekeres.
+\end{remark}
+\begin{theorem}[\cite{erdosszekeres1935combinatorial}]
+~\begin{itemize}
+	\item $R(k,\ell)$ exists for all $k$ and $\ell$,
+	\item $R(k,\ell) \leq R(k-1,\ell) + R(k,\ell-1)$ for $k,\ell\geq 2$, and
+	\item $R(1,\ell) = R(k,1) = 1$. 
+\end{itemize}
+\end{theorem}
+\begin{proof}	
+Let $n = R(k-1,\ell) + R(k,\ell-1)$. Choose $v\in [n]$; then, either
+\begin{enumerate}[(1)]
+  \item  $v$ is joined to $\geq R(k-1,\ell)$ verticies by red edges. In this case choosing an appropriate $X$ among the red neighbors of $v$ gives the result, or
+  \item $v$ is joined to $(n-1) - (R(k-1,\ell)-1) = R(k,\ell-1)$ verticies by blue edges. This case is analogous.
+\end{enumerate}
+This yields $R(k,\ell) \leq R(k-1,\ell) + R(k,\ell-1)$. The third point follows from the definition, and the first inductively from this inequality, using the third point as the base case.
+\end{proof}
+In fact, we may obtain a bound on the $R(k,\ell)$ in this way.
+\begin{corollary}
+\[
+R(k,\ell)\leq {k+\ell -2 \choose k-1}
+\]
+for all $k,\ell \geq 1$.
+\end{corollary}
+\begin{proof}  
+If $k=1$ or $\ell=1$ then $R(k,\ell)=1$. Otherwise, by induction
+\begin{align*}  
+R(k,\ell) &\leq R(k-1,\ell) + R(k,\ell)-1 \\
+&\leq {k+\ell -3 \choose k-2} + {k+\ell -3 \choose k-1} = {k+\ell-2 \choose k-1}.\qedhere
+\end{align*}
+\end{proof}
+\begin{remark}
+In particular, $R(k,k) \leq {2k-2\choose k-1} \sim \frac{4^k}{\sqrt{k}}$. We in fact have $R(3,3) = 6$, $R(4,4)=18$, and $43\leq R(5,5) \leq 49$. 
+\end{remark}
+
+\begin{theorem}[\cite{erdos1947someremarks}]
+$R(k,k)\geq 2^{k/2}$ for $k\geq 2$.
+\end{theorem}
+\begin{proof}  
+Let $n = \floor{2^{k/2}}$ and let $c:[n]^{(2)}\to \{R,B\}$ be chosen unifomrly randomly. That is, the color of every edge in $[n]^{(2)}$ is chosen to be $R$ with probability $1/2$ or $B$ with probability $1/2$, independently of the other edges. Let $Z$ be equal to the number of sets $X\subset[n]$, $|X|=k$, such that $c$ restricted to $X^{(2)}$ is monochromatic. It is enough to show $\E[Z] < 1$. \marginnote{Since then there must be exist some coloring with $Z<1$, i.e., $Z=0$.}
+For fixed $X$ as above,
+\[
+\Pr[c \text{ restricted to }X\text{ is monochromatic}] = \frac{1}{2^{{k\choose 2}-1}}.
+\]
+Then
+\begin{align*}  
+\E[Z] &= {n\choose k} 2^{1 - {k\choose 2}}\leq \frac{n^k}{k!}2^{1 - \frac{k(k-1)}{2}}\\
+&\leq \frac{2^{k^2/2}\cdot 2^{1 + (k/2) - k^2/2}}{k!} = \frac{2^{1+k/2}}{k!}<1
+\end{align*}
+for $k\geq 3$. One may show $R(2,2) = 2$, yielding the case $k=2$.
+\end{proof}
+The state of the art bounds are
+\marginnote{Lower: \cite{SPENCER1975}, upper: \cite{conlon2009new}.}
+% \begin{theorem*}[]
+\[
+(1 + O(1)) \frac{\sqrt{2}k}{e}2^{k/2}\leq R(k,k) \leq k^{- \frac{c\log k}{\log \log k}}4^k.
+\]
+% \end{theorem*}
+
+
+\newthought{Next, if $n$ is sufficiently large} with respect to $k$ and $c:[n]\to \{R,B\}$, then $[n]$ contains a monochromatic \defn{arithmetic progression} of length $k$, that is a set\marginnote{Note that here we are discussing colorings of $[n]$, not $[n]^{(2)}$; that is, vertex colorings, not edge colorings.}
+\[
+\{ a, a+d ,\dotsc, a+(k-1)d\}
+\]
+for some $d>0$. We may write this as $a + [0,k-1]d$, where $[0,k-1] = \{ j\in \Z: 0\leq j\leq k-1\}$ and the addition and multiplication is elementwise. The \defn{Van der Waerden number} $W(k,r)$ is the minimum $n$ such that if $[n]$ is colored in $r$ colors one can always find a monochromatic arithmetic progression of length $k$.
+
+% \missing{Missed class: Monday, March 7}
+\begin{theorem}[\cite{VdWaerden1927}]
+$W(k,r)$ exists for all $r,k$. \label{thm:VdW}
+\end{theorem}
+The proof will follow from \cref{lem:Wkmr}.
+\begin{example}
+\begin{itemize}
+	\item $W(2,r) = r+1$ \marginnote{by pigeonhole}
+	\item $W(k,1) = k$,
+	\item What about $W(3,2)$? Well, \rdot\rdot\bdot\bdot\rdot\rdot\bdot\bdot \,shows $W(3,2) > 8$.  On the other hand, assuming the 5th slot is red, wlog, we reduce to two cases:
+	\begin{align*}	
+	\vartextvisiblespace \rdotm \vartextvisiblespace \bdotm \rdotm \bdotm \vartextvisiblespace \rdotm \vartextvisiblespace\\
+	\rdotm\rdotm\bdotm\bdotm\rdotm\rdotm\bdotm\bdotm\vartextvisiblespace
+	\end{align*}
+
+	Let's outline the general argument; this will give a bound $W(3,2) \leq 5 \times 65 = 325$. Color $[325]$ and divide it into $65$ intervals of length~5.
+\newcommand{\vdwdots}{\rdot\bdot\bdot\rdot\rdot}
+\newcommand{\firstpic}{\begin{tikzpicture}[node distance = .5cm]
+	\node[draw] (n1) at (0,0) {1\,2\,3\,4\,5};
+	\node[left = 1cm of n1]{a)};
+	\node[draw,right= of n1] (n2)  {6\,7\,8\,9\,10};
+
+	\node[right= .25cm of n2] (n7)  {$\dotsm$};
+	\node[draw,right= .25cm of n7] (n10)  {361\,362\,363\,364\,365};
+	\end{tikzpicture}}
+	\newcommand{\secondpic}{\begin{tikzpicture}[node distance = .5cm]
+	\node[draw] (n1) at (0,0) {\phantom{\vdwdots}};
+	\node[left = 1cm of n1]{b)};
+
+	\node[draw,label=above:$I$,right=of n1] (n2) {\vdwdots};
+	\node[right= .25cm of n2] (n3)  {$\dotsm$};
+	\node[draw,right=.25cm of n3,label=above:$I+5d$] (n4)  {\vdwdots};
+	\node[right= .25cm of n4] (n5)  {$\dotsm$};
+	\node[draw,right= .25cm of n5] (n6)  {\phantom{\vdwdots}};
+	\node[draw,right= of n6] (n6p5)  {\phantom{\vdwdots}};
+	\node[right= .25cm of n6p5] (n7)  {$\dotsm$};
+	% \node[draw,right=.25cm of n7,label=above:$I+10d$] (n8)  {\rdot\bdot\bdot\rdot\rdot};
+	% \node[right= .25cm of n8] (n9)  {$\dotsm$};
+	\node[draw,right= .25cm of n7] (n10)  {\phantom{\vdwdots}};
+\draw [
+    thick,
+    decoration={
+        brace,
+        mirror,
+        raise=0.5cm
+    },
+    decorate] (n1.west) --  (n6.east) node [pos=0.5,anchor=north,yshift=-0.55cm] {$33$ intervals};
+	\end{tikzpicture}}
+
+\newcommand{\thirdpic}{\begin{tikzpicture}[node distance = .5cm]
+	\node[draw] (n1) at (0,0) {\phantom{\vdwdots}};
+	\node[left = 1cm of n1]{c)};
+	\node[draw,label=above:$I$,right=of n1] (n2) {\rdot\bdot\bdot\rdot\rdot};
+	\node[right= .25cm of n2] (n3)  {$\dotsm$};
+	\node[draw,right=.25cm of n3,label=above:$I+5d$] (n4)  {\rdot\bdot\bdot\rdot\rdot};
+	\node[right= .25cm of n4] (n5)  {$\dotsm$};
+	\node[draw,right= .25cm of n5] (n6)  {\phantom{\vdwdots}};
+	\node[draw,right=  of n6] (n6p5)  {\phantom{\vdwdots}};
+	\node[right= .25cm of n6p5] (n7)  {$\dotsm$};
+	\node[draw,right=.25cm of n7,label=above:$I+10d$] (n8)  {\phantom{\rdot\bdot} \textvisiblespace \phantom{\rdot} \textvisiblespace};
+	\node[right= .25cm of n8] (n9)  {$\dotsm$};
+	\node[draw,right= .25cm of n9] (n10)  {\phantom{\vdwdots}};
+\draw [
+    thick,
+    decoration={
+        brace,
+        mirror,
+        raise=0.5cm
+    },
+    decorate] (n1.west) --  (n6.east) node [pos=0.5,anchor=north,yshift=-0.55cm] {$33$ intervals};
+	\end{tikzpicture}}
+\begin{figure*}[ht]
+\begin{center}
+
+
+\begin{tabular}{l}
+\firstpic\\[1.25em]
+ \secondpic \\[1.25em]
+\thirdpic
+\end{tabular}
+
+\end{center}
+
+\caption{a) We subdivide $[325]$ into 65 intervals of length $5$. b) By the pigeonhole principle, two of the first $2^5+1=33$ intervals have same coloring. If $I$ is the first interval; then for some $d>0$, the second is $I+5d$. c) To complete the proof, we consider $I+10d$, as described in the text.} \label{fig:VdW_ex_33int}
+\end{figure*}
+	Consider the first $2^5+1=33$ of them. Two of them will be colored exactly the same by pigeonhole; say interval $I$ and interval $I+5d$. If $I = [a,a+5]$, then $\{a,a+d',a+2d'\}$ is an arithmetic progression for $d'\in \{1,2\}$. Now, if either of these progressions are monochromatic, then we are done. Otherwise, say we have $\{{\color{blue} a },{\color{blue} a+d' },{ \color{red} a+2d' } \}$\sidenote{If $a$ and $a+d'$ are different colors, then choose the other $d'$.}, for $d'\in \{1,2\}$. Now, we consider the interval $I+10d$. If $a+2d' + 10d$ is red, then $\{a+2d',a+2d'+5d, a+2d' + 10d\}$ is monochromatic red. Otherwise $a,a+d'+5d, a+2d' + 10d$ is monochromatic blue. 
+
+\end{itemize}
+\end{example}
+
+A \defn{polychromatic $m$-tuple}  of arithmetic progression of length $k$ is a set $A = \{a + [0,k]d_1\} \cup \{ a + [0,k]d_2\} \cup \dotsm \cup \{a + [0,k]d_m\}$ such that $a+ [1,k]d_i$ is monochromatic for all $i$, and all of these $m$ progressions are of different colors (see \cref{fig:polymk} for an example).
+\lect{3}{9}
+
+\begin{marginfigure}
+\[
+ \stackrel{\text{\textvisiblespace}}{0}\,\stackrel{\rdotm}{1}\,\stackrel{\rdotm}{2}\,\stackrel{\gdotm}{3}\,\stackrel{\bdotm}{4}\,\stackrel{\text{\textvisiblespace}}{5} \,\stackrel{\gdotm}{6}\,\stackrel{\text{\textvisiblespace}}{7}\,\stackrel{\bdotm}{8}
+\]
+\caption{With the coloring shown, $\{ 0 + [0,2]\} \cup \{0 + [0,2]\cdot 3\} \cup \{0 + [0,2]\cdot 4\}$ is a  polychromatic $3$-tuple of length $2$.}\label{fig:polymk}
+\end{marginfigure}
+
+
+\begin{lemma} \label{lem:Wkmr}
+If $W(k-1;r)$ exists for every $r$ then for every $m$ there exists $W(k,m,r) = n$ such that in any $r$-coloring of $[n]$ there exists a monochromatic a.p. of length $k$ or a polychromatic $m$-tuple of a.p. of length $k-1$.
+\end{lemma}
+\begin{remark}
+With this result,  \cref{thm:VdW} follows by induction on $k$, using that $W(k;r) \leq W(k,r+1,r)$, since there cannot exist a polychromatic $r+1$-tuple when there are only $r$ colors.
+\end{remark}
+\begin{proof}[Proof by induction on $m$.] Base case: $m=1$. Then in a set of size $W(k-1,r)$ we may find a monochrome $(k-1)$-a.p., say $a+d[1,k]$; then for a polychromatic 1-tuple of a..p of length $k$, we simply need to add the point $a$. We may ensure this by taking a second copy of $W(k-1,r)$ to the left, yielding the bound $ W(k,1,r) \leq 2W(k-1,r)$ (see \cref{fig:vdwclaim_basecase} for an illustration).
+\begin{marginfigure}
+\begin{center}
+\begin{tikzpicture}
+ \node[draw,label={above:$W(k-1,r)$},minimum width = 2.2cm, minimum height = .7cm] (n1) at (0,0) {$a+d[1,k]$};
+\node[draw,left= of n1,minimum width = 2.2cm,minimum height = .7cm,text opacity = .6, label={above:$W(k-1,r)$}] {\quad\qquad$a$};
+ \end{tikzpicture} 
+\end{center}
+\caption{Depiction  showing $ W(k,1,r) \leq 2W(k-1,r)$ by finding a monochrome  $(k-1)$-a.p. $a  + d[1,k]$ in a set of size $W(k-1,r)$ and adding in the point $a$, which may be to the left of the original set of size $W(k-1,r)$.} \label{fig:vdwclaim_basecase}
+\end{marginfigure}
+
+To show the induction step, we will first prove the following result.
+\begin{claim}
+ If $A+d,A+2d,\dotsc, A+(k-1)d$ are \emph{identically colored}\sidenote{For each $x\in A+d$, we have that $x,x+d,\dotsc,x+(k-2)d$ all have the same color.} polychromatic $m$-tuples of a.p. of length $(k-1)$ then $A\cup (A+d)\cup\dotsm \cup (A+ (k-1)d)$ contains a polychromatic $(m+1)$-tuple of a.p. of length $k-1$, or a monochromatic a.p. of length $k$.
+\end{claim}
+\begin{subproof}
+~\medskip
+
+\begin{figure*}
+\begin{center}
+\begin{tikzpicture}[color=black]
+\def\xdiff{1}
+\def\xlength{2}
+
+\node (B1) at (0,0){};
+
+\node (B2) at (\xdiff+\xlength,0){};
+
+\node (B3) at (3*\xdiff+2*\xlength,0){};
+
+
+\foreach \n in {1,2,3}
+{
+\node (B\n s0) at (B\n){\textvisiblespace};
+\node (B\n s1) at (B\n s0)[right]{\rdot};
+\node (B\n s2) at (B\n s1)[right]{\rdot};
+\node (B\n s3) at (B\n s2)[right]{\gdot};
+\node (B\n s4) at (B\n s3)[right]{\ydot};
+\node (B\n s5) at (B\n s4)[right]{\textvisiblespace};
+\node (B\n s6) at (B\n s5)[right]{\gdot};
+\node (B\n s7) at (B\n s6)[right]{\textvisiblespace};
+\node (B\n s8) at (B\n s7)[right]{\ydot};
+}
+
+\node[draw,fit = (B1s0) (B1s8),label=below:$A+d$]{};
+\node[draw,fit = (B2s0) (B2s8),label=below:$A+2d$]{};
+\node[draw,fit = (B3s0) (B3s8),label=below:$A+(k-1)d$]{};
+
+
+\node (dots) at ($(B2s0)!0.5!(B3s8)$) {$\dotsm$};
+
+\end{tikzpicture}
+
+\begin{tikzpicture}[color=black]
+\def\xdiff{1}
+\def\xlength{2}
+
+\node (B0) at (-\xdiff-\xlength,0){};
+
+\node (B1) at (0,0){};
+
+\node (B2) at (\xdiff+\xlength,0){};
+
+\node (B3) at (3*\xdiff+2*\xlength,0){};
+
+
+\foreach \n in {0,1,2}
+{
+\ifthenelse{\n=0}
+{
+\def\opt{\phantom}
+\node[opacity=.4] (B\n s0) at ($(B\n) + (0,0)$){\bdot};
+\node[opacity=.4] (B\n s0r) at ($(B\n) + (0,.12)$){\rdot};
+\node[opacity=.4] (B\n s0g) at ($(B\n) + (0,-.12)$){\gdot};
+}
+{
+\def\opt{}
+\node (B\n s0) at (B\n){\bdot};
+}
+
+
+
+\node (B\n s1) at (B\n s0)[right]{\opt\rdot};
+\node (B\n s2) at (B\n s1)[right]{\opt\rdot};
+\node (B\n s3) at (B\n s2)[right]{\opt\gdot};
+\node (B\n s4) at (B\n s3)[right]{\opt\ydot};
+\node (B\n s5) at (B\n s4)[right]{\opt\textvisiblespace};
+\node (B\n s6) at (B\n s5)[right]{\opt\gdot};
+\node (B\n s7) at (B\n s6)[right]{\opt\textvisiblespace};
+\node (B\n s8) at (B\n s7)[right]{\opt\ydot};
+}
+
+\node[draw,fit = (B1s0) (B1s8),label=below:$A+d$]{};
+\node[draw,fit = (B2s0) (B2s8),label=below:$A+2d$]{};
+\node[draw,fit = (B0s0) (B0s8),label=below:$A$]{};
+% \tikzset{ar/.style={bend left,->,yshift=-3pt,shorten >=2pt,shorten <=2pt}}
+\tikzset{ar/.style={bend left,->,yshift=-2pt,opacity=.4}}
+
+
+\newcommand\ar[4]{
+	\draw[#1]
+	($(#2.east) + (-.16,.11) $) edge[ar] ($(#3.north)$);	
+	\draw[#1]
+	($(#3.north)$) edge[ar] ($(#4.north)$);
+}
+\ar{red}{B0s0r}{B1s1}{B2s2}
+
+\ar{green}{B0s0g}{B1s3}{B2s6}
+\ar{blue}{B0s0}{B1s0}{B2s0}
+
+
+% \draw[blue]
+% 	(B0s0) edge[ar] (B1s0) 
+% 	edge [ar] (B2s0);
+% \draw[red]
+	% (B0s0) edge[ar] 
+	% (B1s1) edge [ar] ($(B2s2.north)$);	
+% \draw[green]
+% 	(B0s0) edge[ar] ($(B1s3.north)$)
+% 	edge [ar] (B2s6);	
+
+
+% \node (dots) at ($(B1s8)-(B1s0)$) {$\dotsm$};
+
+\end{tikzpicture}
+\end{center}
+
+\caption{Upper: an example of identically colored $m$-tuples of arithmetic progressions (with $k=3$). Below: Possible constructions of a monotone $k$-a.p.} \label{fig:VdWlemmafig}
+\end{figure*}
+
+% \missingfigure{Box labelled $A+d$ with blank, red, red, green, yellow, blank, green, blank, yellow. Box $A+2d$ with same dots. Horizontal dots. Box $A+(k-1)d$ with same dots. Now add a blue dot to the beginning of each, and draw a box to the far left labelled $A$. The far left element is $a$. Then $a$ to 0-slot in $A+d$ to 0-slot of $A+2d$ is a.p. Another is $a$ to $1$-slot in $A+d$ to $2$-slot in $A+2d$. Antoher is $a$ to first green of $A+d$ to second green of $A+2d$. And $a$ to first yellow in $A+d$ to second yellow in $A+2d$.(In this example, $k-1=2$)}
+% Let $c$ be denote the coloring. Each $A+\ell d$ for $\ell\in[k-1]$ has the same set of colors:
+% \[
+%  c(A+d):= \{c(x): x\in A+d\} = c(A+2d) = \dotsm = c(A+(k-1)d).
+%  \] 
+%  We write $A+d=\bigcup_{i=1}^m \{a+d+d_i[0,k-1]\}$ where each $a+d+d_i[0,k-1]$ is monochromatic and differently colored from $a+d+d_j[0,k-1]$ for $i\neq j$.  In this language, the identical coloring assumption is that $\{ a+\ell d + s d_i: \ell \in [k-1] \}$ is monochromatic for each $s \in [0,k-1]$.
+
+%  Now, we look at each element of $A$ in turn. Consider the first element, $a$. If $c(a) \in c(A+d)$, then let $c(a) = c(a+d+sd_i)$ for $s\in [k-1]$. Then, by our identical coloring assumption,
+%  \[
+%  \{ a, a+d+sd_i,a+2d+sd_i, \dotsc,a+(k-1)d  +sd_i \}
+%  \]
+%  is a monochromatic a.p. of length $k$.  Let us consider an arbitrary element of $A$, $a+ xd_j$ for $x \in [0,k-1]$ and $i\in[m]$. If $c(a+xd_j) = c(a + d + sd_i)$ for $i\in[m]$ and $s\in[0,k-1]$, then
+
+ Write $A+d=\bigcup_{i=1}^m \{a+d+d_i[0,k-1]\}$ where each $a+d+d_i[0,k-1]$ is monochromatic and differently colored from $a+d+d_j[0,k-1]$ for $i\neq j$. In this language, the identical coloring assumption is that $\{ a+\ell d + s d_i: \ell \in [k-1] \}$ is monochromatic for each $s \in [0,k-1]$.
+ %Then the a.p. $a+sd+d_i[1,k-1]$ is monochromatic for every $i=1,\dotsc,m$ and $s=1,\dotsc,k-1$ (the color does not depend on $s$).
+In particular, 
+\[
+ P':=\{a+d,a+2d,\dotsc,a+(k-1)d\}
+ \] is a monochromatic $(k-1)$-a.p.  If it  is the same as color as $a+d+d_i$ for some $i$, then 
+ \[
+ \{ a+d, a+d+d_i,a+d+2d_i,\dotsc,a+d+(k-1)d_i\}
+ \]
+is a monochromatic $k$-a.p.
+Otherwise,
+%
+% Indeed, if $A\cup(A+d)\cup \dotsm \cup (A+(k-1)d)$ contains no monochromatic $k$-term a.p. then 
+% \[
+%  P':=\{a+d,a+2d,\dotsc,a+(k-1)d\}
+%  \] all are of the same color and different from the color of other a.p. in $A+sd$.
+% 
+consider
+\[
+ P_i':=\{a+d+d_i,a+2d+2d_i,\dotsc,a+(k-1)d+(k-1)d_i\}
+ \] which is an a.p. of the same color as 
+ \[
+ \{a+d+d_i,a+d+2d_i,\dotsc,a+d+(k-1)d_i\}.
+ \]
+and thus a different color from $P'$. Then $P'\cup P_1'\cup\dotsc\cup P_m'\cup\{a\}$ is a polychromatic $(m+1)$-tuple. \qedhere \marginnote{This is the meat of the proof.}
+\end{subproof}
+
+
+Now let $M = W(k,m,r)$ and $N = W(k-1,r^M)$. We will show that $W(k,m+1;r)\leq 2MN$. 
+
+% \missingfigure{Partition into two intervals of length $MN$, and the second into $N$ intervals of length $M$ (by underbraces and overbraces). I can think of the second half as a coloring of $N$ into $r^M$ colors (we encode the coloring of an interval of length $M$ as a single color of the $r^M$ colors). }
+\begin{figure*}
+\begin{center}
+\begin{tikzpicture}[node distance = .5cm, every node/.style={minimum height=.7cm}]
+	\node[draw,left= of n1] (nL)  {\qquad\qquad\qquad\qquad\qquad\qquad\qquad\quad};
+
+	\draw [
+    thick,
+    decoration={
+        brace,
+        mirror,
+        raise=0.5cm
+    },
+    decorate] (nL.west) --  (nL.east) node [pos=0.5,anchor=north,yshift=-0.55cm] {$MN$};
+	
+
+	\node[draw,label=below:] (n1) at (0,0) {\qquad\qquad\quad};
+	\node[draw,right= of n1] (n2)  {\qquad\qquad\quad};
+
+	\node[right= .25cm of n2] (n3)  {$\dotsm$};
+	\node[draw,right= .25cm of n3] (n4)  {\qquad\qquad\quad};
+
+
+		\draw [
+    thick,
+    decoration={
+        brace,
+        mirror,
+        raise=0.5cm
+    },
+    decorate] (n1.west) --  (n4.east) node [pos=0.5,anchor=north,yshift=-0.55cm] {$N$ intervals};
+
+
+    \draw [
+    thick,
+    decoration={
+        brace,
+        raise=0.5cm
+    },
+    decorate] (n1.west) --  (n1.east) node [pos=0.5,anchor=north,yshift=1.2cm] {$M$};
+
+ \draw [
+    thick,
+    decoration={
+        brace,
+        raise=0.5cm
+    },
+    decorate] (n2.west) --  (n2.east) node [pos=0.5,anchor=north,yshift=1.2cm] {$M$};
+     \draw [
+    thick,
+    decoration={
+        brace,
+        raise=0.5cm
+    },
+    decorate] (n4.west) --  (n4.east) node [pos=0.5,anchor=north,yshift=1.2cm] {$M$};
+	\end{tikzpicture}
+\end{center}
+\caption{We think of coloring each interval  of size $M$ on the right side into $r$ colors as assigning the entire interval one of $r^M$ colors.}\label{fig:vdw_ind_step}
+\end{figure*}
+We divide $2MN$ into an interval of size $MN$ followed by $N$ intervals of size $M$, as shown in \cref{fig:vdw_ind_step}.
+By choice of $N$, there are intervals $(k-1)$ intervals on the right side of the form $I,I+d,I+2d,\dotsc,I+(k-2)d$  which are identically colored.
+
+By the choice of $M$, we may assume $I$ contains a polychromatic $m$-tuple of a.p. of length $(k-1)$ which we will call $A+d$. The first interval of size $MN$ serves to include $A$. The induction step is finished by the claim.
+\end{proof}
+The proof yields very poor bounds for $W(k;r)$. The current best bounds are
+\marginnote{LHS: folklore with a randomized construction. RHS: \cite{Gowers2001}.}
+\[
+(1 + o(1)) \frac{r^k}{erk} < W(k;r) \leq 2^{2^{r^{2^{2^{k+9}}}}}.
+\]
+It's conjectured that the upper bound can be improved substantially:
+\begin{conjecture*}
+ $W(k;2) \leq 2^{k^2}$.
+\end{conjecture*}
+Let us proceed to the Hales-Jewett theorem.
+ It may be informally stated as the following: in a $\overbrace{t\times t\dotsm \times t}^{d \text{ dimensional}}$ game of tic-tac-toe with $r$ players, a draw is impossible as long as $d$ is large enough compared to $r$ and $t$.
+Let $A$ be a finite alphabet of size $t$, typically $[0,t-1]$. 
+Then $A^d$ is the set of ordered $d$-tuples of elements of $A$, or words of length $d$ in the alphabet $A$. 
+
+In tic-tac-toe, $A = \{0,1,2\}$, and $d=2$ (see \cref{fig:tic-tac-toe}). We think of each player having a color; a coloring of $\{0,1,2\}^2$ by two colors then corresponds to the moves made by both the players. A draw is impossible if  in any coloring of $\{0,1,2\}^2$, there is a monochromatic ``3-in-a-row'', i.e.,  row, column, or diagonal.
+\begin{marginfigure}
+\begin{center}
+\begin{tikzpicture}
+
+\def\xshift{3.5}
+
+\tikzset{side/.style={gray, thin}}
+
+\draw[step=1cm,gray,very thin] (0,0) grid (3,3);
+
+\foreach \x in {0,1,2}
+{
+\node[side] at ($ (-.3,.5) +(0,\x) $)  {\x};
+\node[side] at ($ (.5,-.3) +(\x,0) $)  {\x};
+	\foreach \y in {0,1,2}
+	{
+	\node at ($ (\x,\y) + (0.5,0.5) $) {\x\y};
+	}
+}
+\end{tikzpicture}
+\end{center}
+\caption{A depiction of  words in tic-tac-toe: elements of $\{0,1,2\}^2$.} \label{fig:tic-tac-toe}
+\end{marginfigure}
+% \missingfigure{3x3 grid, labelled 0,1,2 going up and going right from bottom left. Write ordered pairs in the boxes. Possible roots: $\tau_1=0\star$, $\tau_2=\star\star$. The line associated with $\tau_1$ is the first column. The linea ssociated with $\tau_2$ is the diagonal. The middle row is a combinatorial line associated with $\star 1$. The diagonal from top left to bottom right is not a combinatorial line.}
+\begin{figure*}[ht]
+
+\begin{center}
+\begin{tikzpicture}
+\tikzset{side/.style={gray, thin}}
+\tikzset{combline/.style={draw, DarkBlue, rounded corners=5pt, thick}}
+
+\def\xshift{4};
+
+\begin{scope}
+\draw[step=1cm,gray,very thin] (0,0) grid (3,3);
+
+\foreach \x in {0,1,2}
+{
+\node[side] at ($ (-.3,.5) +(0,\x) $)  {\x};
+\node[side] at ($ (.5,-.3) +(\x,0) $)  {\x};
+	\foreach \y in {0,1,2}
+	{
+	\node at ($ (\x,\y) + (0.5,0.5) $) {\x\y};
+	}
+}
+\def\off{.15};
+
+\draw[combline,label=above:$0\stars$] (\off,\off) rectangle (1-\off,3-\off);
+
+\node[above,DarkBlue] at (.5,3-\off){$0\star$};
+\end{scope}
+
+
+\begin{scope}[shift={(\xshift,0)}]
+
+\draw[step=1cm,gray,very thin] (0,0) grid (3,3);
+
+\foreach \x in {0,1,2}
+{
+% \node[side] at ($ (-.3,.5) +(0,\x) $)  {\x};
+\node[side] at ($ (.5,-.3) +(\x,0) $)  {\x};
+	\foreach \y in {0,1,2}
+	{
+	\node (\x\y) at ($ (\x,\y) + (0.5,0.5) $) {\x\y};
+	}
+}
+\def\off{.15};
+%rotate around={30:(-1,0.5)}
+
+\draw[combline,label=above:$0\stars$,rotate around={-45:(.5,0.5)}] (\off,\off) rectangle ($ (1-\off,1.41*3-4*\off) $);
+
+\node[above,DarkBlue] at (3-.5*\off,3-2*\off){$\star\star$};
+\end{scope}
+
+
+\begin{scope}[shift={(2*\xshift,0)}]
+\draw[step=1cm,gray,very thin] (0,0) grid (3,3);
+
+\foreach \x in {0,1,2}
+{
+% \node[side] at ($ (-.3,.5) +(0,\x) $)  {\x};
+\node[side] at ($ (.5,-.3) +(\x,0) $)  {\x};
+	\foreach \y in {0,1,2}
+	{
+	\node (\x\y) at ($ (\x,\y) + (0.5,0.5) $) {\x\y};
+	}
+}
+\def\off{.15};
+%rotate around={30:(-1,0.5)}
+
+
+
+\draw[combline,label=above:$0\stars$] (\off,1+\off) rectangle ($ (3-\off,2-\off) $);
+
+\node[right,DarkBlue] at (3-1.5*\off,1.5){$\star 1$};
+\end{scope}
+
+
+\begin{scope}[shift={(3*\xshift,0)}]
+
+\draw[step=1cm,gray,very thin] (0,0) grid (3,3);
+
+\foreach \x in {0,1,2}
+{
+% \node[side] at ($ (-.3,.5) +(0,\x) $)  {\x};
+\node[side] at ($ (.5,-.3) +(\x,0) $)  {\x};
+	\foreach \y in {0,1,2}
+	{
+	\node (\x\y) at ($ (\x,\y) + (0.5,0.5) $) {\x\y};
+	}
+}
+\def\off{.15};
+%rotate around={30:(-1,0.5)}
+
+\begin{scope}[xshift=2cm]
+\draw[combline,Red,rotate around={45:(.5,0.5)}] (\off,\off) rectangle ($ (1-\off,1.41*3-4*\off) $);
+\end{scope}
+
+% \node[above,DarkBlue] at (3-.5*\off,3-2*\off){$\star\star$};
+\end{scope}
+
+
+
+\end{tikzpicture}
+
+
+\end{center}
+\caption{Three examples of combinatorial lines in $\{0,1,2\}^2$, followed by a nonexample.  From left to right, combinatorial lines corresponding to roots $\tau_1 = 0\star$, $\tau_2 = \star\star$, and $\tau_3 = \star 1$, respectively, followed by the set $\{02,11,20\}$ in red which is not a combinatorial line. So in tic-tac-toe, not every ``3-in-a-row'' is a combinatorial line, but every combinatorial line is a ``3-in-a-row'', which is enough to show that draws are impossible if we can always find a monochromatic combinatorial line.  } \label{fig:comb_lines_in_tic_tac_toe}
+\end{figure*}
+
+
+
+Moving back to the general development, a \defn{root} $\tau$ is a word of length $d$ in the alphabet $A\cup \{\star\}$, where $\star$ is a symbol not in $A$, which contains at least one $\star$.
+For a root $\tau$ and $a\in A$, the word $\tau(a)$ is obtained by substituting $a$ instead of $\star$ everywhere in $\tau$. A \defn{combinatorial line} in $A^d$ is a set $L_\tau:=\{ \tau(a): a\in A\}$ where $\tau$ is a root of length $d$. See \cref{fig:comb_lines_in_tic_tac_toe} for examples and nonexamples of combinatorial lines in tic-tac-toe. With these definitions, we may formulate the Hales-Jewett theorem as follows. 
+\begin{theorem}[\cite{halesJewett1963regularity}] \label{thm:HJ}
+For every $r$ and $t$, there exists $d= \HJ(t,r)$ such that if $A$ is an alphabet with $|A|=t$ and $A^d$ is colored in $r$ colors, then there exists a monochromatic combinatorial line. 
+\end{theorem}
+\begin{remark}
+The same is true for every $d' \geq d$.
+\end{remark}
+Before proving the Hales-Jewett theorem, we'll discuss an application. 
+Let $V\subset \Z^d$ be a finite collection of vectors. $U$ is called a homothetic copy of $V=\{v_1,v_2,\dotsc,v_t\}$ if $U = u +\lambda V = \{ u + \lambda v_1,u+\lambda v_2,\dotsc, u+\lambda v_t\}$ for some $u\in \Z^d$ and $\lambda\in \Z$. Homothetic copies are a generalization of arithmetic progressions: for $d=1$ and $V = \{0,1,\dotsc,k-1\}$, a homothetic copy of $V$ is exactly an arithmetic progression of length $k$. See  \cref{fig:homothetic_ex} for a two dimensional example.
+\begin{marginfigure}[2cm]
+\begin{center}
+\begin{tikzpicture}[scale=.5]
+% \draw[step=1cm,gray,very thin] (0,0) grid (4,5);
+\def\rad{1.5pt}
+
+\foreach \x in {0,1,...,4}
+{
+	\foreach \y in {0,1,...,5}
+	{
+		\filldraw[black] (\x,\y) circle (\rad);
+	}
+}
+\filldraw[LightGreen] (0,0) circle (3*\rad);
+\filldraw[LightGreen] (0,1) circle (3*\rad);
+\filldraw[LightGreen] (1,0) circle (3*\rad);
+
+\def\lam{2};
+\def\ux{1};
+\def\uy{2};
+
+
+\filldraw[LightBlue] ($ (\ux ,\uy) + \lam*(0,0)  $)  circle (3*\rad);
+\filldraw[LightBlue] ($ (\ux ,\uy)  + \lam*(0,1)  $) circle (3*\rad);
+\filldraw[LightBlue] ($ (\ux ,\uy)  + \lam*(1,0)  $) circle (3*\rad);
+
+\end{tikzpicture}
+\end{center}
+\caption{An example of homothetic copies in $\Z^2$: the green dots are $V = \{(0,0),(0,1),(1,0)\}$, and the blue dots are $U= u +\lambda V$ for $u = (1,2)$ and $\lambda=2$.} \label{fig:homothetic_ex}
+\end{marginfigure}
+\begin{theorem}[Gallai (late 1930s), \cite{Wit_paper}]\marginnote{According to \textcite[page 22]{Ramsey_Yesterday_today_tomorrow}, this theorem was communicated from Gallai to Rado in the late 1930s, and was published in 1943 (\cite{Rado_note}). The theorem was independently proven by Wit in 1952.}
+Let $\Z^d$ be colored in $r$ colors and let $V\subset \Z^d$ be finite. Then there exists a monochromatic homothetic copy of $V$.
+\end{theorem}
+\begin{remark}
+In fact, one can replace $\Z^d$ by $[n]^d$ where $n$ depends on $V$ and $r$, yielding an analog of van der Waerden's theorem.
+\end{remark}
+\begin{proof}	
+The proof will be based on the  HJ theorem.
+
+We will take an appropriately large hypercube and project it into $\Z^d$ such that a combinatorial line in the hypercube projects to a homothetic copy of $V$.
+Let $V = \{v_1,\dotsc,v_t\} =: A$. Let $n$ be such that every $r$-coloring of $A^n$ contains a monochromatic combinatorial line.
+
+Define $f: A^n\to \Z^d$ by $f((a_1,a_2,\dotsc,a_n)) = \sum_{i=1}^n a_i$ where $a_i \in V$. If $\chi$ is the coloring of $\Z^d$ into $r$-colors, then we can define $\chi': A^n \to [r]$ by $\chi'(a) = \chi(f(a))$. By the choice of $n$, there exists a root $\tau$ such that $\tau(v_1)$, $\tau(v_2)$, \ldots, $\tau(v_t)$ all receive the same color. Then $\{f(\tau(v_1)), f(\tau(v_2)), \ldots,f( \tau(v_t))\}$ is a homothetic copy of $V$, as follows. If $\tau = a_1a_2\dotsm a_n$ then set  $u := \sum_{i: a_i\neq \star} a_i$, and $\lambda$  the number of $\star$'s in $\tau$. Then $f(\tau(v_i)) = u+ \lambda v_i$.
+
+\flavor{This is the end, but let me make you believe that this is the end.}
+
+For example, consider $V=\{v_1,v_2,v_3\}$ and $\tau= v_1 v_2 \star v_1 \star$. Then we're claiming $\{f(\tau(v_1)),f(\tau(v_2)),f(\tau(v_3))\}$ is a homothetic copy of $V$. E.g.,
+\[
+f(\tau(v_1)) =  v_1 + v_2 + v_1  +v_1 + v_1 =4v_1  + v_2 = \underbrace{v_1+v_2 +v_1}_{u} + \underbrace{2}_\lambda v_1. \qedhere
+\]
+\end{proof}
+\flavor{Paraphrase: Proofs by logicians are the hardest; I can follow it but I don't understand why things are happening.}
+
+\lect{3}{14}
+% \marginnote{Lecture X: Monday, March 14, 2016.}
+
+\begin{proof}[Proof of \cref{thm:HJ}]
+Let $n = \HJ(t,r)$. We will prove its existence by induction on $t$ for fixed $r$.
+First, $\HJ(1,r)=1$, since combinatorial lines of length 1 are certainly monochromatic.
+
+Now, the induction step. Assume $n = \HJ(t-1,r)$. Let $n\ll N_1 \ll N_2 \ll \dotsm \ll N_n$. Specifically, $N_1 = r^{t^n}$ and $N_i = r^{t^n + \sum_{j=1}^{i-1} N_j}$ for $i\geq 2$, and $N = \sum_{i=1}^n N_i$. We will show that $\HJ(r,t)\leq N$, i.e. if $\chi: A^N \to [r]$, then $\chi$ contains a monochromatic combinatorial line.
+
+% \missingfigure{ long versions of \textvisiblespace labelled $N_1$ to $N_n$ }
+\begin{figure}
+\begin{center}
+\vspace{\baselineskip}
+\begin{tikzpicture}[node distance = 1cm]
+\def\ydif{.1};
+\def \nmax {3};
+\coordinate (1A) at (0,0);
+
+\coordinate (1Au) at ($ (1A) + \ydif*(0,1) $);
+\draw (1A) -- (1Au);
+
+\coordinate[right= of 1A] (1B);
+\coordinate (1Bu) at ($ (1B) + \ydif*(0,1) $);
+\draw (1B) -- (1Bu);
+
+
+\draw (1A) -- (1B) node[midway, label={below:$N_1$}]{};
+
+\foreach \n in {2,3,...,\nmax}
+{
+	\pgfmathparse{int(\n -1 )};
+
+	\coordinate[right= of \pgfmathresult B] (\n A);
+
+	\coordinate (\n Au) at ($ (\n A) + \ydif*(0,1) $);
+	\draw (\n A) -- (\n Au);
+
+	\coordinate[right= of \n A] (\n B);
+	\coordinate (\n Bu) at ($ (\n B) + \ydif*(0,1) $);
+	\draw (\n B) -- (\n Bu);
+
+
+	\draw (\n A) -- (\n B) node[midway, label={below:$N_\n$}]{};
+}
+
+% \pgfmathparse{};
+\pgfmathsetmacro{\nplusone}{int(\nmax +1)}
+
+\node[right = of \nmax B] (\nplusone B) {$\dotsm$};
+
+\pgfmathparse{int(\nmax +2)};
+
+\pgfmathsetmacro{\nplustwo}{int(\nmax +2)}
+
+\coordinate[right= of \nplusone B] (\nplustwo A);
+
+\coordinate (\nplustwo Au) at ($ (\nplustwo A) + \ydif*(0,1) $);
+\draw (\nplustwo A) -- (\nplustwo Au);
+
+\coordinate[right= of \nplustwo A] (\nplustwo B);
+\coordinate (\nplustwo Bu) at ($ (\nplustwo B) + \ydif*(0,1) $);
+\draw (\nplustwo B) -- (\nplustwo Bu);
+
+
+\draw (\nplustwo A) -- (\nplustwo B) node[midway, label={below:$N_n$}]{};
+
+\end{tikzpicture}
+% \vspace{-.5\baselineskip}
+\end{center}
+\caption{A depiction of $N_1,\dotsc,N_n$. We aim to show $\HJ(t,r) = N:= \sum_{i=1}^n N_i$.} \label{fig:HJ1}
+\end{figure}
+We will say $a,b\in A^n$ are \emph{neighbors} if they differ in only one position and one of them has symbol $0$ in this position and the other has the symbol $1$; that is, if $a = a_1a_2\dotsm a_{i-1} 0 a_{i+1} \dotsm a_n$, and $b =a_1a_2\dotsm a_{i-1} 1 a_{i+1} \dotsm a_n$ for some $1\leq i \leq n$.
+
+Let $\tau$ be a root of length $N$ such that $\tau = \tau_1\dotsm \tau_n$ and $\tau_i$ is a root of length $N_i$. For $a \in A^n$, $a = a_1\dotsm a_n$, define
+\[
+\tau(a) = \tau_1(a_1)\tau_2(a_2)\dotsm \tau_n(a_n).
+\]
+For example, suppose we have a root $\tau=\overbrace{\star}^{\tau_1} \overbrace{2\star}^{\tau_2} \overbrace{\star 3\star}^{\tau_3}$. Then $\tau(012) = 021232$.
+Given $\tau = \tau_1\tau_2\dotsm \tau_n$ as above, define $\chi_\tau: A^n \to [r]$ by $\chi_\tau(a) = \chi(\tau(a))$.
+Now, we're not guaranteed that we have monochromatic combinatorial lines in $A^n$, but we will try to compress to $A^{n-1}$ where we do have such lines.
+\begin{claim}
+There exist roots $\tau_1,\tau_2,\dotsc,\tau_n$ such that $\tau_i$ has length $N_i$, and, if $\tau=\tau_1\dotsm \tau_n$, then
+\[
+\chi_\tau(a) = \chi_\tau(b)
+\]
+for any pair of neighbors $a$ and $b$ in $A^n$.
+\end{claim}
+We accept this claim for now to finish the proof. Define $\chi'_\tau$ as the restriction $\chi_\tau': (A\setminus \{0\})^n \to [r]$ of $\chi_\tau$. Then $\chi_\tau'$ contains a monochromatic combinatorial line. That is, there exists $\nu = \nu_1\nu_2\dotsm \nu_n$ with $\nu_i\in (A\setminus\{0\})\cup \{\star\}$ such that $\nu(1),\nu(2),\dotsc,\nu(t-1)$ all have the same color. We wish to show that the line corresponding to $\tau(\nu)$ is monochromatic in $\chi: A^N\to[r]$, where we write $\tau(\nu) := \tau_1(\nu_1)\dotsm \tau_n(\nu_n)$ with $\tau_i(\star)=\tau_i$.
+\marginnote{If $\nu = (12\star)$, then $\tau(\nu) = 122\star 3\star$, using our example $\tau$ from earlier.}
+That is, we want $\tau(\nu(0))$, $\tau(\nu(1))$,\ldots, $\tau(\nu(t-1))$ to receive the same color in $\chi$. So we want $\chi_\tau(\nu(a))$ to be the same for $a=0,1,\dotsc,t-1$.
+
+But $\chi_\tau(\nu(1)) = \dotsm = \chi_\tau(\nu(t-1))$ by the choice of $\nu$. So it remains to show that $\chi_\tau(\nu(0))=\chi_\tau(\nu(1))$.  While $\nu(0)$ and $\nu(1)$ may differ in several positions, in each position one has 1 and the other has 0, so we may change them one at a time using that $\chi_\tau$ acts the same on neighbors, until we see they have the same coloring.
+
+Thus, it remains to prove the claim. We will construct the roots $\tau_1,\dotsc,\tau_n$ in reverse order.
+Suppose $\tau_{i+1},\dotsc,\tau_n$ are constructed.\marginnote{The case $\tau_n$ is similar to the generic step we consider here.}
+% \missingfigure{Intervals $N_1, N_2$, \ldots $N_{i-1}$, $N_i$ with $W_k$, $N_{i+1}$ with $\tau_{i+1}$, \ldots, $N_n$ with $\tau_n$. Overbrace from $N_1$ to $N_{i-1}$ by $M$.}
+For $0\leq k\leq N_i$, let
+\[
+W_k = \underbrace{0\dotsm 0}_k \underbrace{1\dotsm 1}_{N_i-k}\in A^{N_i}
+\]
+Let $M = \sum_{j=1}^{i-1}N_i$. Define a coloring  $\chi_k : A^{M+ n-i} \to [r]$ as
+\[
+\chi_k(x_1 \dotsm x_M y_{i+1}\dotsm y_{n}) =  \chi(x_1\dotsm x_M W_k \tau_{i+1}(y_{i+1})\dotsm \tau_n(y_n)).
+\]
+See \cref{fig:vdwWk} for a depiction of this definition.
+\begin{figure*}[ht]
+\begin{center}
+\begin{tikzpicture}[node distance = 1cm]
+\def\ydif{.1};
+\def\dotsdist{.5};
+
+\setcounter{numint}{0};
+\coordinate (0B) at (0,0);
+\stepcounter{numint}
+
+\newcommand{\vdwinterval}[3][1]{
+	\def\n{\thenumint};
+	\pgfmathparse{int(\thenumint - 1)};
+
+	\coordinate[ node distance = #1 cm, right= of \pgfmathresult B] (\n A);
+
+	\coordinate (\n Au) at ($ (\n A) + \ydif*(0,1) $);
+	\draw (\n A) -- (\n Au);
+
+	\coordinate[right= of \n A] (\n B);
+	\coordinate (\n Bu) at ($ (\n B) + \ydif*(0,1) $);
+	\draw (\n B) -- (\n Bu);
+
+
+	\draw (\n A) -- (\n B) node[midway, label={below:$N_{#2}$},yshift=.2cm]{#3};
+
+	\stepcounter{numint}
+}
+\vdwinterval{1}{\phantom{$W_k$}$\cdot$\phantom{$W_k$}}
+\vdwinterval{2}{\phantom{$W_k$}$\cdot$\phantom{$W_k$}}
+
+\newcommand{\vdwdots}{
+	\def\n{\thenumint};
+	\pgfmathparse{int(\thenumint - 1)};
+
+	\node[node distance = \dotsdist cm, right = of \pgfmathresult B] (\n B) {$\dotsm$};
+	\stepcounter{numint}
+}
+\vdwdots
+\vdwinterval[\dotsdist]{i-1}{\phantom{$W_k$}$\cdot$\phantom{$W_k$}}
+\vdwinterval{i}{$W_k$}
+\vdwinterval{i+1}{$\tau_{i+1}(\cdot)$}
+\vdwdots
+\vdwinterval[\dotsdist]{n}{$\tau_n(\cdot)$}
+
+\draw [
+    thick,
+    decoration={
+        brace,
+        raise=0.65cm
+    },
+    decorate] (1A.west) --  (4B.east) node [pos=0.5,anchor=north,yshift=1.35cm] {$M$};
+
+
+\end{tikzpicture}
+\end{center}
+\caption{An illustration of how $\chi_k$ acts on words in $A^{M+n-i}$. First, we write such a word as $x_1\dotsm x_m y_{i+1}\dotsm y_n$ where $x_j \in A^{N_j}$ (for $j\in [i-1]$) and $y_j \in A$ (for $j=i+1,\dotsc,n$). Then, $\chi_k$ acts on such a word by creating a word of size $A^N$ as follows, which it plugs into $\chi$.  First, $x_1,\dotsc,x_m$ are not modified (visualized by empty slots of the appropriate size in the figure). Then  the word $W_k \in A^{N_i}$ is concatenated, followed by $\tau_{j}(y_j) \in A^{N_j}$ for $j= i+1,\dotsc,n$.} \label{fig:vdwWk}
+\end{figure*}
+% Suppose $\tau_{i+1}$
+Now, $N_i > t^{M+n - i}$, so there exist $k,\ell$ such that $\chi_k = \chi_\ell$, by the pigeonhole principle. WLOG $k< \ell$. Let $\tau_i = \underbrace{0\dotsm0}_k \underbrace{\star\dotsm\star}_{\ell-k} \underbrace{1\dotsm 1}_{N_i - \ell}$. Then $\tau_i(0) = W_\ell$ and $\tau_i(1) = W_k$.
+
+Now, let's show that the resulting $\tau = \tau_1\dotsm \tau_n$ satisfies the claim. Suppose $a = a_1a_2\dotsm a_{i-1} 0 a_{i+1} \dotsm a_n$, and $b =a_1a_2\dotsm a_{i-1} 1 a_{i+1} \dotsm a_n$. Then 
+\begin{align*}	
+\chi_\tau(a) &= \chi(\tau_1(a_1)\tau_2(a_2)\dotsm \tau_{i-1}(a_{i-1})W_\ell \tau_{i+1}(a_{i+1})\dotsm \tau_n(a_n)) \\
+&= \chi_\ell (\tau_1(a_1)\tau_2(a_2)\dotsm \tau_{i-1}(a_{i-1})W_\ell a_{i+1}\dotsm a_n)\\
+&= \chi_k (\tau_1(a_1)\tau_2(a_2)\dotsm \tau_{i-1}(a_{i-1}) a_{i+1}\dotsm a_n)\\
+&= \chi_\tau(b).\qedhere
+\end{align*}
+\end{proof}
+%should 7.8
+\begin{theorem}[Density Hales-Jewett theorem, \cite{DensityHJ}] \label{thm:HJ_density}
+For every $\epsilon>0$ and each $t$, there exist $n$ such that if $|A| = t$ and $Z \subset A^n$ with $|Z| \geq \epsilon t^n$ then $Z$ contains a combinatorial line.
+\end{theorem}
+\begin{remark}
+This theorem implies \cref{thm:HJ}. If we consider an $r$-coloring as a partition $Z_1,\dotsc,Z_r$ of $A^n$, then we have some $i$ such that $|Z_i| \geq \frac{1}{r}t^n$ by the pigeonhole principle. Then \cref{thm:HJ_density} with $\epsilon= \frac{1}{r}$ implies that $Z_i$ contains  combinatorial line, proving \cref{thm:HJ}.
+\end{remark}
+
+%thm. 7.9
+\begin{theorem}[\cite{szemeredi1975sets}]
+$\forall \, \epsilon>0$ and $\forall\, k$, $\exists N > 0$ such that if $A\subset [N]$ with $|A| \geq \epsilon N$, then $A$ contains an arithmetic progression of length $k$.
+\end{theorem}
+
+
+%thm. 7.10
+\begin{theorem}[\cite{green2008primes}]
+For every $k$, the set of primes contain arithmetic progressions of length $k$. \marginnote{Since the density of primes goes to zero, the density theorem above does not help.}
+\end{theorem}
+
+
+If we wanted to formulate a density version of Ramsey's theorem, how it would it go? For every $t$ and $\epsilon>0$, there exists $N$ such that if $G$ is a graph on $N$ verticies  and $|G|\geq \epsilon {N\choose 2}$, then $G$ contains $K_t$.
+But this is equivalent to $\pi(K_t) = 0$, which is false for $t\geq 3$.
+
+\newthought{Let us} move on. Consider a finite sequence $A=(a_1,\dotsc,a_n)$. Then we say $(a_{i_1},a_{i_2},\dotsc,a_{i_k})$ is an \defn{increasing subsequence}[subsequence!increasing] of $A$ if $i_1 < i_2 < \dotsb< i_k$ and $a_{i_1}\leq a_{i_2} \leq \dotsm \leq a_{i_k}$. Likewise, $(a_{i_1},a_{i_2},\dotsc,a_{i_k})$ is a \defn{decreasing subsequence}[subsequence!decreasing] of $A$ if $i_1 < i_2 < \dotsb< i_k$ and $a_{i_1}\geq a_{i_2} \geq \dotsm \geq a_{i_k}$. 
+
+\begin{problem}
+For all $k$, does there exist a number $f(k)$ such that every sequence of length at least $f(k)$ contains an increasing or decreasing subsequence of length $k$?
+\end{problem}
+
+Indeed, such an $f(k)$ exists: $f(k) \leq R(k,k)$. Given a sequence $(a_n)_{n=1}^{R(k,k)}$, we can create a coloring on $[R(k,k)]$ as follows: given an edge $\{i,j\}\in [R(k,k)]^{(2)}$  with $i<j$, we color $\{i,j\}$ red if $a_i\leq  a_j$, and blue otherwise. Then by the definition of $R(k,k)$, we are guaranteed  a monochromatic complete graph on $k$ verticies. This yields an increasing subsequence if the monochromatic $K_k$ is red, and decreasing if the $K_k$ is blue. This yields an exponential bound on $f(k)$. But we can do better.
+\begin{theorem}[\cite{erdosszekeres1935combinatorial}]
+For all $k,\ell\geq 2$ any sequence of length at least $(k-1)(\ell-1)+1$ contains an increasing subsequence of length $k$ or a decreasing subsequence of length $\ell$.
+\end{theorem}
+\begin{remark}
+In the case $k=\ell$, this is a quadratic bound on $f(k)$.
+\end{remark}
+\begin{proof}[Proof by induction on $k+\ell$]	
+If $k=2$, say, then any sequence of length $\ell$ is decreasing or not.
+For the induction step, let $n = (k-1)(\ell-1) + 1$,  $A=(a_1,\dotsc,a_n)$ be a sequence, and $Z$ be the set of last elements of increasing subsequences of length $k-1$ in $A$. Then, $Z = (a_{i_1},a_{i_2},\dotsc,a_{i_z})$ with $i_1< \dotsm < i_z$, where $z = |Z|$. For contradiction, assume $A$ violates the claim.
+
+Then $A\setminus Z$ contains no increasing subsequences of length $k-1$ and no decreasing subsequences of length $\ell$. So $|A\setminus Z| \leq (k-2)(\ell-1)$. Then $|Z| \geq (k-1)(\ell-1)+1 - (k-2)(\ell-1)\geq \ell$. So if $Z$ is decreasing we are done. If not, then there exists $s$ such that $a_{i_s} \leq a_{i_{s+1}}$. Then let $(b_{i_1},b_{i_2},\dotsc,b_{i_{k-1}} = a_{i_s})$ be an increasing sequence ending in $a_{i_s}$. Then this sequence extends to a length $k$ sequence by adding $a_{i_{s+1}}$.
+\end{proof}
+\lect{3}{16}
+% \marginnote{Lecture X: Wednesday, March 16, 2016.}
+Let us consider a pigeonhole proof of this result.
+\begin{proof}	As before, let $A = (a_1,\dotsc,a_n)$ be a sequence.
+For every $s\in[n]$, we will associate to $a_s$ two numbers:
+\begin{itemize}
+	\item $i_s$, the length of the longest increasing subsequence ending in $a_s$,
+	\item $d_s$, the length of the longest decreasing subsequence ending in $a_s$. 
+\end{itemize}
+If $A$ contains no subsequence we need then $1\leq i_s\leq k-1$ and $q\leq d_s\leq \ell-1$ so there are $(k-1)(\ell-1)$ possible pairs.
+
+So there exist $1\leq s<t \leq n$ such that $(i_s,d_s) = (i_t,d_t)$ by the pigeonhole principle. Suppose, by symmetry, that $a_s\leq a_t$. Then an increasing subsequence of length $i_s$ ending in $a_s$ can be extended to a subsequence of length $i_{s+1}$ ending in $a_t$. This is a contradiction to $i_t=i_s$.
+\end{proof}
+

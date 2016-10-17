@@ -1,0 +1,118 @@
+
+\lect{3}{30}
+\marginnote{Guest lecture}
+% \marginnote{Lecture X: Wednesday March 30, 2016. Guest lecture.}
+
+\section*{Density version of VdW}
+Consider $[0,N]\subset \Z$. We will color these numbers with $m$ colors. At least one color-class will contain more than $\frac{N}{m}$ elements by pigeonhole. Now, is the following density version of VdW theorem true?
+
+\begin{theorem}[Density VdW]
+\label{thm:density_VdW}
+For every $k\in \N$ and for every $\delta>0$, there exists $N_0$ such that if $A\subset\{1,\dotsc,N\}$ and $N>N_0$, and $|A|\geq \delta N$, then $A$ contains a $k$-AP (arithmetic progression of length $k$).
+\end{theorem}
+
+
+In 1963, Roth proved this theorem for $k=3$ using the ``circle method'' of number theory. Later, Szemeredi proved the statement for arbitrary $k$. His proof, however, gives terrible bounds for $N_0$ and was extremely technical. Next, F\"urstenberg used ergodic theory (developing a whole theory) to prove the result in a clear way, but also has very soft bounds. In 1998, Tim Gowers developed a different proof using higher-order Fourier analysis (giving more reasonable bounds); this won him a fields medal.
+
+Let $A\subset \{1,\dotsc,N\}$ be chosen randomly: every element is chosen independently with probability $\delta$\marginnote{For each $x\in \{1,\dotsc,N\}$ we include $x$ in $A$ with probability $\delta$ and don't include it with probability $1- \delta$ (say by flipping a biased coin).}.
+Then $|A|\approx \delta N$. How many $3$-AP's are in $A$? $\delta^3 \times$ \# of $3$-AP's in $\{1,\dotsc,N\}$. This is then $c \delta^3 N^2$ for some $c>0$.
+
+So random sets contain many $3$-APs. If $A$ does not have any 3-AP's, then ``it is far from looking random.'' Then we will try to find some structure in $A$ and exploit it. We will come back to this later.
+
+\paragraph{Triangles in graphs.} How many triangles are in $G(n, \frac{1}{2})$? This is the \erdos-Ramsey (?) random graph, where each edge is decided independently by a fair coin flip. The probability of a triangle existing is $\left( \frac{1}{2} \right)^3 = \frac{1}{8}$, and there are ${n\choose 3}$ possible triangles, so we expect $\frac{1}{8}{n\choose 3}$ triangles.
+
+The edge density is $\frac{1}{2}$ meaning the number of edges is $\frac{1}{2}{n\choose 2}$.
+
+If we consider the adjacency matrix of $G(n,\frac{1}{2})$, besides symmetry, it just looks ``gray,'' meaning half filled, half not.
+
+If we consider the complete bipartite graph on $n$ vertices, we have the same edge density, and the adjacency matrix looks like
+\[
+\begin{pmatrix}
+0 & 1 \\
+1 & 0
+\end{pmatrix}
+\]
+as a block matrix. We can think of each block as uniform, either with density $0$ or $1$, but the whole matrix is certainly not uniform.
+
+ For $G(n,\frac{1}{2})$, the whole matrix is uniform, with density $\frac{1}{2}$.
+
+We could also consider a graph with adjacency matrix
+\[
+\begin{pmatrix}
+\text{choose edge with prob. }\frac{2}{3} &\text{choose edge with prob. } \frac{1}{3}\\
+\phantom{\text{choose edge with prob. }}\frac{1}{3} & \phantom{\text{choose edge with prob. }}\frac{2}{3}
+\end{pmatrix}
+\]
+in some division into blocks. This graph would yield a different number of triangles.
+\begin{definition}
+Bipartite graph on $(A,B)$ is called $\epsilon$-regular if for all $A'\subset A$, for all $B'\subset B$, $|A'|\geq \epsilon |A|$, $|B'|\geq \epsilon B$ implies
+\[
+|d(A',B') - d(A,B)| \leq \epsilon,
+\]
+where $d(X,Y) = \frac{\edges (X,Y)}{|X|\cdot |Y|} $ is the edge density between $X$ and $Y$.\marginnote{$\edges(X,Y)$ denotes the number of edges between vertex sets $X$ and $Y$.}
+\end{definition}
+\begin{remark}
+This means if we restrict to any large enough subsets, the edge density of those subsets is close to the edge density of the whole bipartite graph.
+\end{remark}
+
+\begin{lemma} \label{lem:eregular_yields_triangles}
+If $A,B,C$ are vertex sets so that $d(A,B) = a$, $d(A,C)=b$, and $d(B,C)=c$, and $a,b,c\geq 2 \epsilon$, and $(A,B)$, $(A,C)$, $(B,C)$ are $\epsilon$-regular, then $(A,B,C)$ contains at least \[
+(1-2 \epsilon)(a- \epsilon)(b- \epsilon)(c- \epsilon)\cdot |A|\cdot |B|\cdot|C|
+\]
+triangles.
+\end{lemma}
+\begin{proof}	
+First, $A$ has at most $\epsilon |A|$ vertices whose number of neighbors in $B$ is less than $(a- \epsilon)|B|$. Otherwise, take $B'=B$ and $A' = \{v\in A: |N_B(v)| < (a - \epsilon)|B|\}$. If $|A'|\geq \epsilon |A|$, then $d(A',B') \geq a - \epsilon$, contradicting the definition of $A'$.
+
+In the same way, $A$ has at most $\epsilon|A|$ vertices whose neighbors in $C$ is less than $(b - \epsilon)|C|$.
+
+Likewise, $B$ has at most $\epsilon |B|$ vertices whose neighbors in $C$ is less than $(c- \epsilon)|C|$.
+
+\missingfigure{Oval for each of $A,B,C$ far away from each other. Cross out two patches of $A$ corresponding to vertices with few neighbors in $B$ and few in $C$. Connect $A$ to paches in $B$ and $C$. Patch in $B$ has size $(a - \epsilon) |B|$ and pach in $C$ has size at least $(b- \epsilon)|C|$.  }
+\end{proof}
+
+
+
+
+
+\begin{theorem}[Regularity lemma] \label{thm:regularity_lemma}
+For every $\epsilon>0$ there exists $T = T(\epsilon)$ such that the vertices of every graph $G$ can be partitioned into almost equal size parts $V_1,\dotsc, V_T$ such that at least $(1-\epsilon)$ fraction of pairs $(V_i,V_j)$ are $\epsilon$-regular.
+\end{theorem}
+
+\begin{remark}
+$T$ does not depend on the number of vertices, only on $\epsilon$. So instead of considering an arbitrarily large graph, we may simply think of a $T\times T$ matrix of pairs $(V_i,V_j)$ such that most pairs are regular. The bad news is $T(\epsilon)\geq 2^{2^{2^{\iddots^2}}}$ where there are approximately $\frac{1}{\epsilon^2}$ $2$'s. This bound can't be substationally improved, as shown by examples.
+\end{remark}
+
+\begin{definition}
+A graph is \emph{$\epsilon$-far} from being triangle free if one needs to remove $\geq \epsilon n^2$ edges to make $G$ triangle free.
+\end{definition}
+\begin{theorem}[Triangle removal lemma] \label{thm:triangle_removal_lemma}
+If $G$ is $\epsilon$-far from being triangle-free, then it contains at least $\delta( \epsilon)n^3$ triangles.
+\end{theorem}
+\begin{proof}	
+Let $G$ be $\epsilon$-far from being triangle free. Consider an $\frac{\epsilon}{4}$-regularization of $G$ via \cref{thm:regularity_lemma}. We get a partition of $V(G)$ into $T(\epsilon/4)$ parts such that most pairs are $\epsilon/4$-regular.
+% \begin{tabular}{c|c|c|c}
+% &&&\\
+%  \hline\\
+%  \hline\\
+%  \hline\\
+%  \hline
+% \end{tabular}
+
+Let us clean up $G$. Remove all the edges from irregular $(V_i,V_j)$'s. Remove all the edges from sparse\sidenote{where here, sparse means the density is less than $\epsilon/2$.} pairs $(V_i,V_j)$, and remove the edges from the diagonal pairs $(V_i,V_i)$. This is less than $\frac{3}{4}\epsilon n^2$  edges in total.
+
+Since $G$ was $\epsilon$-far from being triangle free, the cleaned-up version still has triangles. Since we have at least one triangle, there is $V_i,V_j,V_k$ with a triangle\sidenote{Recall, we removed all edges from $(V_i,V_i)$, so each vertex of the triangle is in a different $V_i$.}. But then each pair has density at least $\epsilon/2$, is $\epsilon/4$-regular and \cref{lem:eregular_yields_triangles} yields $ \epsilon^3 \left( \frac{n}{T} \right)^3$ triangles.
+\end{proof}
+
+
+
+Let $A\subset \{1,\dotsc,N\}$ with density at least $\epsilon$. Let $U,V,W$ be...
+
+For every $s\in A$ we add a triangle $x\in U$, $x+s \in V$, $x+2s\in W$ for each $x$. Label the edges by $s$.
+\missingfigure{3 ovals, $U=\{1,\dotsc,N\},V,W$. Label $x\in U$, connect to $x+s\in V$, $x+2s \in W$ to make a triangle. Label the edges with $s$.}
+
+These are $N\cdot |A|$ edge-disjoint triangles, since each $(x,s)$ yields a new triangle: any one edge uniquely determines the triangle because it determines $x$ and $s$. We need to remove at least $|A|N \geq \epsilon N^2$ edges to make this graph triangle free. So by \cref{thm:triangle_removal_lemma}, there are $\sim N^3$ triangles, so we can find a new triangle different from any determined by $(x,s)$.
+
+Then the labels $(s_1,s_2,s_3)$ of this new triangle form a 3-AP in $A$. We can check by the way we constructed these triangles that $s_1+s_3=2s_2$.
+
+Check: we have an edge $(x,x+s_1)$, $(x+s_1,y+2s')$, and $(y+2s',x)$. Then $s_2 = y+2s'- x - s_1$, and $s_3 = \frac{1}{2}(y+2s'-x)$. So $s_1 + s_2 = y+ 2s' - x = 2s_3$, as we wanted.

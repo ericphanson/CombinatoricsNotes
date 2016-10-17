@@ -1,0 +1,389 @@
+%!TEX root = ../CombinatoricsNotes.tex
+
+\section{Compression and Shadows} %\marginnote{Lecture 7: Wednesday, January 27, 2016.}
+\lect{1}{27}
+As an aside, let's consider Steiner symmetrization\sidenote{\cite{steiner1838einfache}}, a technique in geometry.
+Given a shape $K\subset \R^2$, with a line of ``symmetry'' $L$, we obtain $S_L(K)$ from $K$ by replacing $K\cap L'$ for every line $L'$ orthogonal to $L$ by an interval of length equal to $|K\cap L'|$ centered at $L$.
+\paragraph{Properties:}
+\begin{enumerate}
+	\item $\area(S_L(K)) = \area(K)$
+	\item $\diam(S_L(K)) \leq \diam (K)$ \marginnote{The diameter is the largest distance between two points on $K$. We may prove this by drawing trapezoids between two lines $L'$ and $L''$, one of which passes through each point (close to) achieving the diameter.}
+	\item $\perim(S_L(K)) \leq \perim(K)$.
+\end{enumerate}
+Given a shape in $\R^2$ with area 1, what is the smallest diameter? That's the diameter of the area 1 disc. Sketch of proof: take the shape acheiving minimum diameter. By a compactness argument, we could show that if we ``repeatedly'' symmetrize, eventually it is symmetric across every line.
+
+If some bounded shape is symmetric with respect to reflection about three lines $L_1, L_2,$ and $L_3$, then $L_1,L_2,L_3$ all go through the same point. Why? The center of mass must lie on each line.
+This will show us that we have a disk. Let us consider a discrete to this symmetrization process: \defn{compression}.
+For $A\in [n]^{(r)}$, set
+\[
+R_{ij}(A) = \begin{cases}
+(\A\setminus \{j\})\cup \{i\}, & \text{if } j\in A, i\not \in A\\
+A, & \text{otherwise}.
+\end{cases}
+\]
+For example,
+\begin{gather*}	
+R_{15}(\{2,3,5\}) = \{1,2,3\}, \qquad
+R_{15}(\{2,3,4\}) = \{2,3,4\},\\
+R_{15}(\{1,3,5\}) = \{1,3,5\}.
+\end{gather*}
+Let $\tilde{R}_{ij}(\A) = \{R_{ij}(A): A\in \A\} \cup \{A: R_{ij}(A)\in \A \}$. \marginnote{Intuition: $\tilde{R}_{ij}$ applies $R_{ij}$ unless the resulting set is already in $\A$, to prevent collapse.}
+
+\paragraph{Properties:}
+\begin{enumerate}
+	\item $|\tilde{R}_{ij}(\A)| = |\A|$.
+
+	Let $P_{ij} \subset [n]^{(r)}$ denote the collection of all sets containing $j$ but not $i$. Then $R_{ij}: P_{ij} \to P_{ji}$  is bijection.
+\end{enumerate}
+
+
+\noindent We will say $\A$ is \defn{compressed} if $\tilde{R}_{ij}(\A)= \A$ for all $i<j$.
+\begin{enumerate}\setcounter{enumi}{1}
+\item Any set system $\A$ can be made compressed by applying finitely many compression operators $\tilde{R}_{ij}$, for $i<j$.
+
+Let $w(A) = \sum_{i\in A} i$, and $w(\A) = \sum_{A\in \A} w(A)$. Then $w(R_{ij}(A)) \leq w(A)$ with equality iff $R_{ij}(A)=A$. Therefore, $w(\tilde{R}_{ij}(\A))\leq w(\A)$ with equality iff $\tilde{R}_{ij}(\A) = \A$. Therefore, the process must stop, because we start with finite integer weight and the weight may only decrease (and may not be negative).
+\end{enumerate}
+
+
+In human terms, a compressed set system is one where if we try to replace any element of a set with a smaller element, we end up with something already in the set system.
+Let us define a natural partial order on $[n]^{(r)}$. If $A = \{a_1,\dotsc,a_r\}$ with $a_1 < a_2 < \dotsb < a_r$, and $B = \{b_1,\dotsc,b_r\}$ with $b_1<\dotsb < b_r$, then we say $A\preceq B$ if $a_i\leq b_i$ for all $i=1,\dotsc,r$.
+
+
+\begin{enumerate} \setcounter{enumi}{2}
+\item If $i<j$, then $R_{ij}(A) \preceq A$, and conversely if $A' \preceq A$, then $A'$ can be obtained from $A$ by using finitely many compression operators $R_{ij}$ for $i<j$.
+
+\end{enumerate}
+Therefore, $\A$ is compressed if and only if for every $A\prec B$ with $B\in \A$, we have that $A\in \A$. In otherwords, $\A$ is an ideal in this order. See \cref{fig:compressed_sets_partial_order} for an example.
+\begin{marginfigure}
+\begin{center}
+\begin{tikzcd}
+& \boxed{\{1,2\}} \arrow{d}\\
+&\boxed{\{1,3\}} \arrow{ld} \arrow{rd}\\
+\boxed{\{1,4\}} \arrow{d} \arrow{rrd}  & &\boxed{\{2,3\}} \arrow{d}\\
+\boxed{\{1,5\}} \arrow{d}&& \boxed{\{2,4\}}\arrow{d} \arrow{lld}\\
+\{2,5\} \arrow{rd} && \boxed{\{3,4\}} \arrow{ld}\\
+&\{3,5\} \arrow{d}\\
+&\{4,5\}
+\end{tikzcd}
+\end{center}
+\caption{The partial order on $[5]^{(2)}$, where $A\rightarrow B$ means $a \prec b$, and different sets in the same row are incomparable. The boxed elements together form a compressed set.} \label{fig:compressed_sets_partial_order}
+\end{marginfigure}
+
+\begin{enumerate}\setcounter{enumi}{3}
+	\item  If $\A$ is intersecting, then $\tilde{R}_{ij}(\A)$ is intersecting.
+	Suppose not. Then there exists $A,B\in \tilde{R}_{ij}(\A)$ such that $A\cap B= \emptyset$. If both $A,B\in \A$, then they are intersecting, so let $A\not \in \A$. Then $A = R_{ij}(A')$ for some $ A'\in \A$ with $j\in A'$. Now, if $B \not \in \A$ too, then $B = R_{ij}(B')$ for some $B'\in \A$ with $j\in B'$, and we'd have $i\in A\cap B$, which is a contradiction. So $B\in \A$ with $i\not\in B$.  If $B= R_{ij}(B)$, then $R_{ij}(B)\in \A$. Otherwise, we have $j \in B$, and we must  have $B \neq R_{ij}(B')$ for every $B'\in \A$ (for   $B\in P_{ij}$, while the image of $R_{ij}$ is  $P_{ji}$ which is disjoint from $P_{ij}$). In this case then, since $B\in \tilde{R}_{ij}(\A)$, we must then have $R_{ij}(B)\in \A$ too. So in either case, $R_{ij}(B)\cap A'\in \A$ which is intersecting, so $R_{ij}(B)\cap A' \neq \emptyset$.
+
+	% Now, $k\neq j$ has $k\in A'\cap B$, then  then $k \in R_{ij}(A') = A$, so $k\in A\cap B$, which is a contradiction. On the other hand, $A'\cap B\neq \emptyset$ since $A',B\in \A$ which is intersecting. So $A'\cap B = \{j\}$, and thus $j\in B$. So $B\in P_{ij}$. So $R_{ij}(B) \neq B$, and $B\in \tilde{R}_{ij}(\A)$, so $B$ is such that $R_{ij}(B) \in \A$ (otherwise $B$ would be the non-trivial image of some $B'$ under $R_{ij}$, which leads to a contradiction as showed earlier). Thus $R_{ij}(B)\cap A' \neq \emptyset$.
+
+
+
+	%   So $A',B\in \A$, and thus $A'\cap B\neq \emptyset$.
+
+
+
+	% Suppose not. Then there exists $A,B\in \tilde{R}_{ij}(\A)$ such that $A\cap B = \emptyset$. We may assume that $\A \not \ni A = R_{ij}(A')$ for some $A'\in \A$, and $B\in \A$\sidenote{Otherwise $i\in B$, so $A\cap B \ni i$.}, and $A'\cap B = \{j\}$. So $B\in P_{ij}$, and hence was unchanged by $R_{ij}$, 
+
+
+	% so $R_{ij}(B)\in \A$. Then $A'\cap R_{ij}(B) \neq \emptyset$, since $\A$ is intersecting.
+
+	But $A'$ is obtained from $A$ by changing $j$ to $i$, and $R_{ij}(B)$ is obtained from $B$ by changing $j$ to $i$, so if $A'\cap R_{ij}(B) \neq \emptyset$, then we have $A\cap B\neq \emptyset$.
+
+
+
+\end{enumerate}
+
+\begin{proof}[Proof of \erdos-Ko-Rado theorem by compression]
+We wish to show that if $r\leq n/2$, $\A\subset [n]^{(r)}$ is intersecting, then
+\[
+|\A| \leq {n-1 \choose r-1}.
+\]
+We will proceed by induction on $n$ and $r$. The case $r=n/2$ is easy: ${n-1\choose r-1} = \frac{1}{2}{n\choose r}$, and sets in $[n]^{(r)}]$ are just complementary pairs.
+
+Assume $r<n/2$. By the facts we have proven, we may assume $\A$ is compressed. Let
+\begin{align*}
+\A_0 &= \{A\in \A: n\not\in \A\}, & \A_1 &= \{A\in \A: n\in A\}.
+\end{align*}
+Then by the IH,
+\[
+|\A| = |\A_0| + |\A_1| \leq {n-2 \choose r-1} + |\A_1|
+\]
+If $|\A_1| \leq {n-2 \choose r-2}$, then\sidenote{using ${n-2 \choose r-1} + {n-2 \choose r-2} = {n-1\choose r-1}$} we have $|\A| \leq {n-1\choose r-1}$.
+Let 
+\[
+\A_1 \setminus \{n\} := \{A-\{n\}: A\in \A_1\}.
+\]
+ If $\A_1\setminus \{n\}$ is intersecting, then $|\A_1\setminus \{n\}| \leq {n-2 \choose r-2}$ by the IH, since $\A_1\setminus \{n\} \subset [n-1]^{(r-1)}$. 
+Suppose $\A_1\setminus \{n\}$ is not intersecting. Then there exists $A,B\in \A$ such that 
+\[
+A\cap B = \{n\}.
+\]
+Because $2r<n$, there exists $i<n$ such that $i\not \in A\cup B$. Then $R_{in}(B) \in \A$ since $\A$ is compressed.
+But $A\cap R_{in}(B) = \emptyset$, contradicting that $\A$ is intersecting. 
+\end{proof}
+
+Let $\A\subset [n]^{(r)}$, with $|\A| = m$. What is $\min |\partial \A|$? \marginnote{Recall: 
+\[
+\partial A = \{B \in [n]^{(r-1)}: B\subset A \text{ for some } A\in \A\}.
+\]}
+We know the local LYM inequality:
+\begin{equation*}	\tag{\cref{eq:local_LYM}}
+\frac{|\partial A|}{{n\choose r-1}}\geq \frac{|\A|}{{n\choose r}}
+\end{equation*}
+but this is rarely tight.
+
+Let's consider $m=1$, that is, $|\A|=1$. Then the answer is $r= {r\choose r-1}$. For $m=2$, the answer is $2r-1$, because their shadows can at most share 1 set.
+For $r=2$, we have a simple graph with $m$ edges. What is the minimal number of verticies? We want the minimal $n$ so that $m\leq {n \choose 2}$.
+\lect{2}{1}
+% \marginnote{Lecture 8: Monday, February 1, 2016.}
+Let us change our question to consider $\A\subset \N^{(r)}$ . Given $r$ and $m$, what is $\min |\partial \A|$ given $\A\subset \N^{(r)}$ with $|\A| = m$?
+
+\begin{lemma} \label{lem:compression_decreases_size_of_shadow}We have that
+\[
+|\partial \tilde{R}_{ij}(\A)| \leq |\partial \A|
+\]
+for every $\A\subset \N^{(r)}$.
+\end{lemma}
+\begin{proof}	
+
+It suffices to show that
+\marginnote{ $|X|\geq |Y| \iff |X\setminus Y| \geq |Y\setminus X| $ because $|X| = |X\setminus Y| + |X \cap Y|$ and $|Y| = |Y\setminus X| + |X\cap Y|$. }
+\[
+|\partial \tilde{R}_{ij}(\A)\setminus(\partial \A)| \leq | \partial A\setminus(\partial \tilde{R}_{ij}(\A))|.
+\]
+If $B\in \partial \tilde{R}_{ij}(\A)\setminus (\partial \A)$, then $i\in B$ but $j\not\in B$. Let's see why this is true. Let $A\in  \tilde{R}_{ij}(\A)\setminus (\A)$ such that $B = A\setminus\{k\}$ for some $k$. Then $i\in A$, $j\not \in A$ (and so $j\not \in B$ too). Now, if $i\not \in B$, then $k=i$. But then $B = R_{ji}(A)\setminus\{j\}$ so $B\in \partial \A$, a contradiction.
+
+
+
+It is enough to show that
+\[
+R_{ji}(B)\in \partial \A\setminus(\partial \tilde{R}_{ij}(\A)).
+\]
+Clearly, $R_{ji}(B)\in \partial \A$, since $B= A\setminus\{k\}$ with $k\neq i,j$, so $R_{ji}(B) = R_{ji}(A)\setminus\{k\}$.
+
+The last piece to check is that $R_{ji}(B)\not\in \partial \tilde{R}_{ij}(\A)$. If that were the case, then $R_{ji}(A)\setminus\{k\} \subset C$ for some $C \in \tilde{R}_{ij}(\A)$. Since $j\in R_{ji}(A)$ and $k\neq j$, we have $j\in C$. Then $R_{ij}(C) \in \A$. But then $B=A\setminus \{k\} \in R_{ij}(C) \in \A$, so $B \in \partial \A$, a contradiction.
+% Assume $B= C \setminus \{\ell\} \in \partial \tilde{R}_{ij}(\A)$ for some $C \in \tilde{R}_{ij}(\A)$. Then $C\setminus\{\ell\} = R_{ji}(A)\setminus \{k\}$.
+% \understand
+\end{proof}
+This lemma shows that for the purposes of minimizing $|\partial \A|$, we may start with a compressed set.
+
+\newthought{We defined a partial order} on $\N^{(r)}$ by $A = \{a_1,\dotsc,a_r\}$, $a_1<a_2<\dotsb < a_r$, and $B=\{b_1,\dotsc,b_r\}$, and $b_1<b_2<\dotsb < b_r$, then $A\preceq B$ if $a_i\leq b_i$ for $i\in[r]$.
+We may define the \defn{lexicographic order} on $\N^{(r)}$. We say $A\leq_L B$ if ($a_1<b_1$) or ($a_1=b_1$ and $a_2 < b_2$) or $(a_1 = b_1$ and $a_2=b_2$, but $a_3<b_3)$ etc. That is, either $A=B$, or if $s$ is the minimal index such that $a_s\neq b_s$, then $a_s<b_s$. See \cref{fig:53_lexographic_order} for an example.
+\begin{marginfigure}
+\begin{tikzcd}[column sep=small]
+\boxed{\{1,2,3\}} \arrow{r} & 
+\boxed{\{1,2,4\}} \rar \snakesetup &
+\{1,2,5\} \snakearrow{lld}  \\
+\boxed{\{1,3,4\}} \rar &
+\{1,3,5\} \rar \snakesetup&
+\{1,4,5\}  \snakearrow{lld}\\
+\boxed{\{2,3,4\}} \rar \snakesetup &
+\{2,3,5\}  \rar   &
+\{2,4,5\}   \snakearrow{lld}\\
+\{3,4,5\}
+\end{tikzcd}
+
+\caption{Elements of $[5]^{(3)}$ in lexographic order, where $A\imp B$ means $A\leq_L B$. The subsets of $[4]^{(3)}$ are boxed; they appear in order, but not next to each other.} \label{fig:53_lexographic_order}
+\end{marginfigure}
+
+Consider the lexographic order on $\N^{(3)}$. What is the 100th smallest set in this order? $\{1,2,102\}$.
+
+
+Now, let us define the \defn{colexicographic order} on $\N^{(r)}$. Define $A\leq B$ if $a_r<b_r$ or ($a_r=b_r$ and $a_{r-1} <b_{r-1}$) or \ldots etc. We may write this as $A=B$ or if $s$ is the maximal index such that $a_s\neq b_s$, then $a_s<b_s$. 
+
+
+
+% \begin{fullwidth}
+
+\begin{figure*}[ht]
+% \makeatletter\setlength\hsize{\@tufte@fullwidth}\setlength\linewidth{\@tufte@fullwidth}\let\caption\@tufte@orig@caption\makeatother
+\centering
+
+\begin{tikzcd}[column sep=small]
+[3]^{(3)} &\{1,2,3\} \arrow{d} \\
+ {[4]^{(3)}}\setminus[3]^{(3)} & \{1,2,4\} \arrow{r}& \{1,3,4\} \snakesetup \arrow{r}& \{2,3,4\} \snakearrow{lld}\\
+{[5]^{(3)}}\setminus[4]^{(3)} & \{1,2,5\} \arrow{r} & \{1,3,5\}\arrow{r} & \{2,3,5\} \arrow{r}& \{1,4,5\} \arrow{r}& \{2,4,5\}\arrow{r} & \{3,4,5\}
+\end{tikzcd}
+\bigskip
+\caption{Elements of $[5]^{(3)}$ in colexographic order. Note that $[n]^{(r)}$ is an initial segment of the colex order on $\N^{(r)}$. \label{fig:53_colexographic_order}} 
+\end{figure*}
+% \end{fullwidth}
+
+\begin{theorem}[\cite{kruskal1963,katona1968}] \label{thm:kruskal_katona}
+If $\A\subset \N^{(r)}$ with $|\A| = m$, then $|\partial \A|$ is at least as large as the size of the shadow of the first $m$ elements of $\N^{(r)}$ in colexicographic order.
+\end{theorem}
+\begin{example}
+If $A= \{10,7,3\}$ what is the position of $A$ in the colex order on $\N^{(3)}$? In the rows\sidenote{Referring to an analogous diagram to \cref{fig:53_colexographic_order}.} before $A$, there will be $|[9]^{(3)}| ={9\choose 3}$ elements.  In the row containing $A$, there are sets of the form $\{10,x,*\}$ with $x<7$, i.e. ${6\choose 2}$ sets. Next, there are sets of the form $\{10,7,y\}$ with $y<3$, i.e. ${2\choose 1}$ sets. Finally, we have our set, $\{10,7,3\}$. In total then,
+\[
+{9\choose 3} + {6\choose 2} + {2\choose 1} + 1 = 102.
+\]
+
+See \cref{fig:colex_near_A} for a diagram.
+\begin{figure*}[ht]
+\begin{center}
+\begin{tikzcd}[column sep=tiny]
+  \{10,6,5\} \rar&\{10,7,1\} \rar &\{10,7,2\} \rar &\{10,7,3\} \rar  & \{10,7,4\}  \rar & \{10,7,5\}\rar   & \{10,7,6\}  \rar & \{10,8,1\}.
+\end{tikzcd}
+\caption{The colex order near $A=\{10,7,3\} \subset \N^{(3)}$. The notation $A\imp B$ means $A\leq B$ in colex order. Since $A$ is the 102nd set in colex order on $\N^{(3)}$, $\{10,7,1\}$ is the 100th set which provides a nice comparison to $\{1,2,102\}$, the 100th set in lexicographic order. In particular, we note that in colex order, every set is finitely many positions away from the smallest set, while in lexicographic order many sets are infinitely far (like $\{1,3,4\}$).}\label{fig:colex_near_A}
+\end{center}
+
+\end{figure*}
+% \improvement{Put captions of full-width figures below the figure in the main column.}
+\end{example}
+
+
+% \begin{definition}
+For $A\in \N^{(r)}$, let the \defn{initial segment of $A$} be $I(A) =\{B: B\leq \A\}$ and let $i(A) = |I(A)|$. 
+% \end{definition}
+\begin{lemma}
+If $A = \{a_1,\dotsc,a_r\}$ with $a_r>a_{r-1}>\dotsb> a_1$ then 
+\[
+i(A) = {a_{r}-1\choose r} + {a_{r-1}-1 \choose r-1} + \dotsb + {a_1-1 \choose 1} + 1.
+\]
+\end{lemma}
+\begin{proof}	
+${a_{k} -1\choose k}$ counts sets $B\subset A$ which coincide with $A$ over 
+\[
+ a_r,a_{r-1},\dotsc,a_{k+1}
+\]
+  but whose $k$th largest element is smaller.
+\end{proof}
+
+\begin{lemma} We have that the shadow of the inital segment $I(A)$ is the initial segment of $A\setminus\{\min A\}$. That is,
+\[
+\partial I(A) = I( A\setminus \{\min A\}).
+\]
+\end{lemma}
+\begin{proof}	
+If $A = \{a_r,\dotsc,a_2,a_1\}$, then we wish to show that $B\subset \N^{(r-1)}$ is in $\partial I(A)$ if and only if $B \leq \{a_r,\dotsc,a_2\} = A\setminus \{\min A\}$ in colex order. This is left as an exercise. One way to proceed is by induction on $r$, splitting into cases where $B$ contains $a_r$ or not.
+% \add{proof.}
+\end{proof}
+
+\begin{corollary}
+If  
+\[
+ i(A) = {a_r-1\choose r} + {a_{r-1} \choose r-1} + \dotsb + {a_1-1\choose 1} + 1,
+ \]
+then 
+\[
+|\partial (I(A))| = {a_r -1\choose r-1} + {a_{r-1} -1 \choose r-2} + \dotsb + {a_2-1 \choose 1} + 1.
+\]
+\end{corollary}
+
+Let us restate \cref{thm:kruskal_katona}:
+\begin{theorem*}[Kruskal--Katona]
+Let $\A\subset \N^{(r)}$ with 
+\[
+|\A| = {a_r-1\choose r} + {a_{r-1} -1\choose r-1} + \dotsb + {a_1-1\choose 1} + 1
+\]
+for some $a_r>\dotsc>a_1$. Then
+\[
+|\partial \A| \geq{a_r -1\choose r-1} + {a_{r-1} -1 \choose r-2} + \dotsb + {a_2-1 \choose 1} + 1.
+\]
+\end{theorem*}
+\begin{remark}
+For every positive integer $m$, we may write $m$ as 
+\[
+m={a_r-1\choose r} + {a_{r-1} \choose r-1} + \dotsb + {a_1-1\choose 1} + 1
+\]
+for some $a_r> a_{r-1} > \dotsm > a_1$. We have shown this already by considering the $m$th element in colex order of $\N^{(r)}$.
+\end{remark}
+
+\begin{proof}[Proof by induction on $r$; for fixed $r$, by induction on $|\A|$.] The base case $r=1$ is trivial. For the induction step, we will assume that $\A$ is compressed, by \cref{lem:compression_decreases_size_of_shadow}. Let
+\begin{align*}	
+A_1 :\!&= \{A\in \A: 1\in A\}, & A_0 :\!&= \A\setminus \A_1.
+\end{align*}
+
+\begin{enumerate}[{Claim} 1:]
+\item $|\A_1| \geq |\partial A_0|$.\marginnote{Compression pushes us towards smaller elements, so $\A_1$ should be large.}
+
+\begin{subproof}	
+The map $A\mapsto A\cup\{1\}$ is an injection from $\partial \A_0$ to $\A_1$, by compression.
+\end{subproof}
+	\item
+	\[
+	|\A_1|\geq {a_r-2\choose r-1} + {a_{r-1}-2\choose r-2} + \dotsb + {a_2-2\choose 1} + 1.
+	\]
+	\begin{subproof}Assume not. Since $|\A_0| =|\A| - |\A_1|$, we have then have
+	\begin{align*}	
+	|\A_0|&> \left( {a_r-1\choose r} - {a_r-2\choose r-1} \right) + \left( {a_{r-1}-1\choose r-1} - {a_{r-1}-2\choose r-2} \right) + \dotsb + {a_1-1 \choose 1}\\
+	&= {a_{r}-2 \choose r} + {a_{r-1}-2\choose r-1} + \dotsb + {a_1-2 \choose 1}+1.
+	\end{align*}
+	By the IH\sidenote{Since $\A$ is compressed it must contain 1}, 
+\[
+|\partial \A_0| \geq {a_r-2\choose r-1} + \dotsb + {a_2-2\choose 1}+1
+\]
+Then claim 1 yields the result.
+	\end{subproof}
+\end{enumerate}
+Let $B = \{A-\{1\}: A\in \A_1\}\subset \N^{(r-1)}$. Note $|B| = |\A_1|$.
+\begin{enumerate}[{Claim} 1:]
+\setcounter{enumi}{2}
+	\item 
+	$|\partial \A|\geq |B| + |\partial B|$.
+
+	\begin{subproof}	
+	Note $B\subset \partial \A$. Let $B' = \{B\cup \{1\}: B\in \partial B\} \subset \partial A$. Then $B\cup B' \subset \partial \A$. But since sets in $B'$ contain $1$ and sets in $B$ do not contain $1$, $|B\cup B'| = |B|+|B'|$.
+	\end{subproof}
+\end{enumerate}
+By claims 2, 3, and the IH, we have
+\begin{align*}	
+|\partial \A| &\geq |B| + |\partial B| \\
+&\geq {a_r-2 \choose r-1} + {a_{r-1}-2\choose r-2} + \dotsb + {a_2-2\choose 1}+1 \\
+&\qquad + {a_r-2 \choose r-2} + {a_{r-1}-2 \choose r-3} + \dotsb + {a_3-2\choose 1} + 1\\
+&= {a_r-1\choose r-1} + \dotsb {a_3-1\choose 2} + {a_2-1\choose 1}+1.  \qedhere
+\end{align*}
+\end{proof}
+\begin{theorem}[\cite{lovaszbook_hyper}]
+Let $\A\subset \N^{(r)}$, where $|\A| = {x\choose r}$ for $x\in \R$.\marginnote{We define ${x\choose r} := \frac{x(x-1)\dotsm(x-r+1)}{r!}$. Since the polynomials
+${x\choose r}$ and ${x-1\choose r} + {x-1\choose r-1}$ agree on the integers, they agree everywhere.}
+Then $|\partial \A| \geq {x\choose r-1}$.\sidenote{If $x$ is an integer, then equality can be achieved by taking $\A=[x]^{(r)}$.}.
+\end{theorem}
+\begin{proof}	
+The proof follows that of the reformulated Kruskal--Katona. Claims 1 \& 3 have the same proof. For claim 2, there is a much simpler proof:
+\begin{enumerate}[{Claim }1.]\setcounter{enumi}{1}
+% \item $|\partial \A_0|\leq|\A_1|$
+\item $|\A_1|\geq {x-1\choose r-1}$.
+\begin{subproof}	
+If not, $|\A_0| = |\A| - |\A_1| \geq {x\choose r} - {x-1 \choose r-1} = {x-1\choose r}$. Then $|\partial \A_0| \geq {x-1\choose r-1} > |\A_1|$, a contradiction.
+\end{subproof}
+% \item 
+\end{enumerate}
+The rest of the proof is the same.
+\end{proof}
+
+
+\begin{corollary} \label{cor:ell_shadows}
+Let $\A\subset \N^{(r)}$ with $|\A| = {x\choose r}$ for $x\in \R$. Let 
+\[
+\partial^{(\ell)}\A = \{B\in \N^{(r-\ell)}: B\subset A \text{ for some }A\in\A\}.
+\]
+Then
+\[
+|\partial^{(\ell)}A|\geq {x\choose r-\ell}.
+\]
+\end{corollary}
+\begin{proof}[Proof by induction on $\ell$.] The base case is Lor\'asz's theorem. Then
+\[
+\partial^{(\ell)}\A = \partial ( \partial^{(\ell-1)}\A)
+\]
+so the IH and Lor\'asz's theorem yield the result.
+\end{proof}
+
+\begin{corollary}
+Let $G$ be a 2-graph. Then \marginnote{$\edges (G)$ denotes the edge set of $G$. We identify $G$ with $\edges (G)$.}
+\[
+|G| = |\edges (G)| = {x\choose 2}
+\]
+for some $x\in \R$. Then $G$ contains at most ${x\choose k}$ complete subgraphs\sidenote{$k$-tuples of verticies pairwise joined by edges.} of size $k$.
+\end{corollary}
+\begin{remark}
+We may reformulate this as follows, in a special case. Let $G$ be a graph with ${n\choose 2}$ edges (but possibly more than $n$ verticies). Then $G$ contains a maximum number of triangles when $G$ is a complete graph of $n$ verticies. We think of this as we are given a budget of edges, and are trying to maximize the number of triangles we make. Here it is intuitive that to do this, we make a complete graph.
+\end{remark}
+\begin{proof}	
+We may assume that $x\geq k$; otherwise we may not form any complete $k$-subgraphs. If the number of complete subgraphs of $G$ is strictly larger than ${x\choose k}$, then it is equal to ${x' \choose k}$ for some $x' > x$. So we choose $\A$ to be the family of verticies of complete subgraphs of $G$: 
+\[
+\A = \{V(H): H \text{ is a complete subgraph of }G\} \subset V(G)^{(k)}.
+\] Then each $\{x,y\} \in \partial^{(k-2)} \A$ is a two element subset of a complete subgraph of $G$,  so $\partial^{(k-2)} \A\subset \edges(G)$. Then by \cref{cor:ell_shadows}, we must have $|\edges (G)| \geq {x'\choose 2} > {x\choose 2}$, a contradiction.
+% \understand
+% Everything that lies in the shadow of order $k-2$ must
+\end{proof}

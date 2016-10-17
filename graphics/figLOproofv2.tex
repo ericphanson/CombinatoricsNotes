@@ -1,0 +1,62 @@
+%!TEX root = ../Combinatorics.tex
+
+\newcommand{\makearrow}[2]{
+    \begin{scope}
+    \coordinate (A) at (#1);
+    \coordinate (B) at ([xshift=+120pt,yshift=+60pt]A);
+    \draw (A) edge[->] (B);
+\end{scope}
+}
+
+\newdimen\XCoord
+\newdimen\YCoord
+
+\newcommand*{\ExtractCoordinate}[1]{\path (#1); \pgfgetlastxy{\XCoord}{\YCoord};}%
+\newcommand*{\LabelCurrentCoordinate}[2]{\fill [#1] ($(\XCoord,\YCoord)$) circle (2pt) node [right] {#2}}%
+
+\pgfmathsetseed{3}
+
+\begin{center}
+\begin{tikzpicture}[scale=.25]
+\def\scale{.1};
+\def\x{2};
+\def\y{5};
+
+\coordinate (A) at (\x,\y);
+\coordinate (B) at ([xshift=+120pt,yshift=+60pt]A);
+\draw (A) edge[->,Red] node[auto=right, pos=-0.1]{{\tiny $X_{A_k}$}} node[ auto=right, near end]{{\tiny $X_{A_k\cup\{n\}}$}} (B);
+
+\coordinate (C) at ($ (A) + (4,4) $);
+\coordinate (D) at ([xshift=+120pt,yshift=+60pt]C);
+
+\draw (C) edge[->,Blue] node[auto, near start]{{\tiny $X_{A_1}$}} node[ auto=right, near end]{{\tiny $X_{A_1\cup\{n\}}$}} (D);
+
+
+
+\dimline[label style={above=0.5ex},extension start length=.24,extension end length=.24]{($ (A) + .24*(-4,4) $)}{($ (C) + .24*(-4,4) $)}{{\tiny $>1$}};
+
+\coordinate (new) at ($ (C) - (B) $);
+
+\ExtractCoordinate{$(new)$};
+
+\coordinate (newer) at ($(\YCoord,-\XCoord)$);
+%(\YCord, -\XCord)
+
+
+\dimline[label style={ above=.2ex,right, rotate=90},extension start length=-.6,extension end length=-.6]{($ (B) + 3*(newer) $)}{($ (C) + 3*(newer) $)}{{\tiny $<1$}};
+
+
+% \end{scope}
+
+ % \begin{scope}[scale=\scale]
+    % \coordinate (C) at $(\x + 10, \y)$;
+    % \coordinate (D) at ([xshift=+120pt,yshift=+60pt]C);
+    % \draw (C) edge[->] (D);
+% \end{scope}
+
+  \foreach \x in {1,2,...,5}{
+    \makearrow{rand*5+4,rand*5-2.5}{\scale};}
+
+\makearrow{3,12}{\scale};
+\end{tikzpicture}
+\end{center}

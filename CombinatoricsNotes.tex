@@ -1,0 +1,442 @@
+\documentclass[nobib,nohyper,final]{tufte-handout}
+% \usepackage[T1]{fontenc}
+% \usepackage[utf8]{inputenc}
+% \usepackage{fbb}
+
+\title{A survey of extremal combinatorics\thanks{McGill \smallcaps{MATH} 550 notes, Winter 2016.}\smallskip}%\thanks{Based on lectures by Prof. Sergey Norin, Winter 2016.}}
+
+\author{Written by Eric Hanson,\\based on lectures by Prof. Sergey Norin\smallskip}
+
+\date{April 2016} % without \date command, current date is supplied
+
+
+% Generates the index
+\usepackage{imakeidx}
+
+
+\usepackage{adjustbox}
+%\geometry{showframe} % display margins for debugging page layout
+\usepackage{amsmath}  % extended mathematics
+
+\usepackage{amsthm, amssymb}
+\usepackage{braket}
+\usepackage{graphicx} % allow embedded images
+  \setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio}
+  \graphicspath{{graphics/}} % set of paths to search for images
+
+\usepackage{booktabs} % book-quality tables
+\usepackage{units}    % non-stacked fractions and better unit spacing
+\usepackage{multicol} % multiple column layout facilities
+\usepackage{lipsum}   % filler text
+\usepackage{fancyvrb} % extended verbatim environments
+
+\usepackage{mathdots}
+% \usepackage{schemata}
+\usepackage{accents}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+ 
+
+ %%%FIX for hyperref changing captions
+ \makeatletter
+\let\tufte@caption\@caption  
+ \usepackage[unicode,hyperfootnotes=false,hypertexnames=false,colorlinks]{hyperref}
+\let\@caption\tufte@caption  
+
+\hypersetup{%
+    pdfborder = {0 0 0},
+    bookmarksdepth = section,
+    citecolor = DarkGreen,
+    linkcolor = DarkBlue,
+    urlcolor = DarkGreen,
+  }
+% \usepackage[colorlinks]{hyperref}
+% \usepackage{caption}
+\usepackage[dvipsnames]{xcolor}
+
+
+\usepackage{soul}
+\usepackage{calc}
+\newcommand{\ditto}[1]{%
+\rule[\heightof{e} * \real{0.8}]{(\widthof{#1} - \widthof{\,\raisebox{-.2ex}{\textquotedbl}\,}) * \real{0.5}}{.2pt}%
+\,\raisebox{-.2ex}{\textquotedbl}\,%
+\rule[\heightof{e} * \real{0.8}]{(\widthof{#1} - \widthof{\,\raisebox{-.2ex}{\textquotedbl}\,}) * \real{0.5}}{.2pt}%
+}
+
+%%
+%Bibliography
+% \usepackage[style=alphabetic,maxalphanames = 4,maxcitenames  = 3,minalphanames = 3,minnames = 1,backref=true, backend = biber]{biblatex}
+\usepackage[style=authoryear,backref=true, backend = biber,autocite=footnote,sortcites=true,defernumbers]{biblatex}
+\addbibresource{Combinatorics.bib}
+
+%%
+%Names for subibs
+% \usepackage{nameref}
+\defbibheading{subbibliography}{%
+\section*{References for Section \therefsegment.}}
+
+\defbibheading{fullbib}{%
+\section*{Collected references}}
+
+\usepackage{cleveref}
+
+
+
+
+\usepackage{layouts}
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+\usetikzlibrary{calc,decorations,decorations.pathreplacing,shapes,fit}
+\usepackage{tikz-dimline}
+\usepackage{tkz-euclide}
+
+
+\definecolor{halfgray}{gray}{0.55} % chapter numbers will be semi transparent .5 .55 .6 .0
+\definecolor{webgreen}{rgb}{0,.5,0}
+\definecolor{webbrown}{rgb}{.6,0,0}
+%\definecolor{Maroon}{cmyk}{0, 0.87, 0.68, 0.32}
+%\definecolor{RoyalBlue}{cmyk}{1, 0.50, 0, 0}
+%\definecolor{Black}{cmyk}{0, 0, 0, 0}
+
+
+
+% TODO NOTES STUFF 
+\usepackage{xargs}
+\usepackage[colorinlistoftodos,prependcaption,textsize=small,linecolor=OliveGreen,backgroundcolor=OliveGreen!25,bordercolor=OliveGreen,obeyFinal]{todonotes}
+\newcommandx{\unsure}[2][1=]{\todo[inline,prepend,caption={Unsure},linecolor=red,backgroundcolor=red!25,bordercolor=red,#1]{#2}}
+\newcommandx{\change}[2][1=]{\todo[inline,prepend,caption={Change},linecolor=blue,backgroundcolor=blue!25,bordercolor=blue,#1]{#2}}
+\newcommandx{\outline}[2][1=]{\todo[inline,prepend,caption={Outline},linecolor=OliveGreen,backgroundcolor=OliveGreen!25,bordercolor=OliveGreen,#1]{#2}}
+\newcommandx{\improvement}[2][1=]{\todo[inline,prepend,caption={Improvement},linecolor=Plum,backgroundcolor=Plum!25,bordercolor=Plum,#1]{#2}}
+\newcommandx{\thiswillnotshow}[2][1=]{\todo[inline,disable,#1]{#2}}
+\newcommandx{\add}[2][1=]{\todo[inline,prepend,caption={Add},linecolor=Plum,backgroundcolor=Plum!25,bordercolor=Plum,#1]{#2}}
+\newcommandx{\missing}[2][1=]{\todo[inline,prepend,caption={Missing},linecolor=blue,backgroundcolor=blue!25,bordercolor=blue,#1]{#2}}
+
+
+\newcommandx{\flavor}[2][1=]{\todo[inline,prepend,caption={Flavor},linecolor=pink,backgroundcolor=pink!25,bordercolor=pink,#1]{#2}}
+
+\newcommandx{\checkthis}[1][1=]{\todo[inline,prepend,linecolor=red,backgroundcolor=red!25,bordercolor=red,#1]{Check this.}}
+
+\newcommandx{\understand}[1][1=]{\todo[inline,prepend,caption={To do},linecolor=blue,backgroundcolor=blue!25,bordercolor=blue,#1]{Understand this.}}
+
+
+  \fvset{fontsize=\normalsize}% default font size for fancy-verbatim environments
+
+
+\def\mathnote#1{%
+  \tag*{\rlap{\hspace\marginparsep\smash{\parbox[t]{\marginparwidth}{%
+  \footnotesize#1}}}}
+}
+
+
+%colored dots
+\newcommand{\rdot}{\textcolor{red}{\textbullet}}
+\newcommand{\gdot}{\textcolor{green}{\textbullet}}
+\newcommand{\ydot}{\textcolor{yellow}{\textbullet}}
+\newcommand{\bdot}{\textcolor{blue}{\textbullet}}
+
+
+
+\newcommand{\rdotm}{{\color{red} \bullet}}
+\newcommand{\gdotm}{{\color{green} \bullet}}
+\newcommand{\ydotm}{{\color{yellow} \bullet}}
+\newcommand{\bdotm}{{\color{blue} \bullet}}
+
+
+\newcommand\vartextvisiblespace{%
+  \makebox[.5em]{\color{black}{%
+    \kern.07em
+    \vrule height.3ex
+    \hrulefill
+    \vrule height.3ex
+    \kern.07em
+  }}% <-- don't forget this one!
+}
+
+
+
+\renewcommand{\restriction}{\mathord{\upharpoonright}}
+
+
+\usepackage{xparse}
+% \DeclareDocumentCommand \defn { m o }{%
+%   \IfNoValueTF {#2} {%
+%     \emph{#1}\index{#1}%
+%   }{%
+%     \emph{#1} \index{#2}%
+%   }%
+% }
+
+\NewDocumentCommand{\defn}{m o}{%
+  {\emph{#1}}%
+  \IfNoValueTF{#2}
+    {\index{#1}\label{#1}}
+    % {\index{#2@#1}\label{#2}}%
+    {\index{#2}\label{#2}}%
+}
+% \newcommand{\defn}[1]{\emph{#1}\index{#1}}
+% \newcommand{\Pr}{\emph}
+\DeclareMathOperator{\prob}{Pr}
+\DeclareMathOperator{\reg}{Reg}
+\DeclareMathOperator{\crossings}{cr}
+
+% \renewcommand{\cros}{\operatorname{cr}}
+
+\DeclareMathOperator{\per}{per}
+\newcommand{\field}{\mathbb{F}}
+\DeclareMathOperator{\HJ}{HJ}
+
+\DeclareMathOperator{\ex}{ex}
+
+\DeclareMathOperator{\area}{Area}
+\DeclareMathOperator{\diam}{Diam}
+\DeclareMathOperator{\dist}{dist}
+
+\DeclareMathOperator{\perim}{Perimeter}
+\DeclareMathOperator{\aff}{aff}
+\DeclareMathOperator{\conv}{conv}
+
+% \newcommand{\H}{\mathcal{H}}
+
+
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+% \theoremstyle{plain} is the default. it sets the text in italic and adds extra space above and below the \newtheorems listed below it in the input. it is recommended for theorems, corollaries, lemma*s, propositions, conjectures, criteria, and (possibly; depends on the subject area) algorithms.
+
+% \theoremstyle{definition} adds extra space above and below, but sets the text in roman. it is recommended for definitions, conditions, problems, and examples; i've alse seen it used for exercises.
+
+% \theoremstyle{remark} is set in roman, with no additional space above or below. it is recommended for remarks, notes, notation, claims, summaries, acknowledgments, cases, and conclusions.
+\theoremstyle{definition}
+\newtheorem*{xdefinition}{Def}
+
+\NewDocumentEnvironment{definition}{oo}
+  {\IfNoValueTF{#1}
+     % no optional argument to definition
+     {\begin{xdefinition}}
+     % at least one optional argument
+     {\IfNoValueTF{#2}
+       % only one optional argument
+       {\begin{xdefinition}\index{Definition!#1}\label{def-#1}}
+       % two optional arguments
+       {\begin{xdefinition}\index{Definition!#1@#2}\label{def-#1}}%
+    }%
+  }
+  {\end{xdefinition}}
+\makeindex
+
+
+\newtheorem*{examples}{Examples}
+\newtheorem*{example}{Example}
+\newtheorem*{exercise}{Exercise}
+\newtheorem*{solution}{Solution}
+
+\newtheorem*{problem}{Problem}
+\newtheorem*{conjecture*}{Conjecture}
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+\newtheorem*{claim}{Claim}
+
+
+\theoremstyle{plain}
+
+\newtheorem*{theorem*}{Theorem}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem*{proposition}{Proposition}
+\newtheorem*{corollary*}{Corollary}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem*{lemma*}{Lemma}
+\newtheorem{lemma}[theorem]{Lemma}
+
+\DeclareMathOperator{\cl}{cl}
+\DeclareMathOperator{\symd}{\triangle}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\M}{\mathcal{M}}
+
+\let\Haccent\H
+
+
+\newcommand{\erdos}{Erd\Haccent os}
+\renewcommand{\H}{\mathcal{H}}
+
+\newcommand{\Cset}{\mathcal{C}}
+
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\E}{\mathbb{E}}
+
+\renewcommand{\C}{\mathbb{C}}
+\renewcommand{\P}{\mathcal{P}}
+\newcommand{\A}{\mathcal{A}}
+\newcommand{\B}{\mathcal{B}}
+
+\newcommand{\F}{\mathcal{F}}
+
+\newcommand{\imp}{\rightarrow}
+
+\newcommand{\limp}{\leftarrow}
+
+\renewcommand{\setminus}{-}
+
+\newcommand{\inv}{^{-1}}
+\newcommand{\ubar}[1]{\underaccent{\bar}{#1}}
+
+%%% semantic combinatorics commands
+\newcommand{\edges}{\mathcal{E}}
+
+
+\newenvironment{subproof}[1][\proofname]{\begin{proof}[#1]\renewcommand{\qedsymbol}{\scalebox{.6}{$\blacksquare$}}}{\end{proof}}
+
+%%% For Tikz-cd Drawing:
+
+%% How to use: put \snakesetup earlier in the line which will end with a snaking line. Then put \snakearrow{lld} say at the end of the line. If you want a label, you could do \snakearrow{lld,"label"}.
+%I don't entirely understand where you put \snakesetup. I think there has to be an entry below it?
+\newcounter{snakecount}
+
+\newcommand{\snakesetup}{
+\noexpand{\stepcounter{snakecount}\arrow[d, phantom, ""{coordinate, name={Z\the\value{snakecount}}}]}}
+\newcommand{\snakearrow}[1]{
+\arrow[#1,rounded corners,
+to path={ -- ([xshift=2ex]\tikztostart.east)
+|- (Z\the\value{snakecount}) [near end]\tikztonodes
+-| ([xshift=-2ex]\tikztotarget.west)
+-- (\tikztotarget)}]
+}
+%%%%
+
+
+%%%
+\colorlet{green}{Green}
+\colorlet{red}{Red}
+\colorlet{blue}{Blue}
+\colorlet{pink}{Pink}
+
+% \colorlet{red}{Plum}
+
+% \usetikzlibrary{external}
+% \tikzexternalize
+
+\usepackage[american,showdow]{datetime2}
+\newcounter{lecture}
+\setcounter{lecture}{2}
+% \newcommand{\lect}[2]{\marginnote{Lecture \thelecture: \DTMdate{2016-#1-#2}.}\stepcounter{lecture}}
+\newcommand{\lect}[2]{}
+
+
+%change sidenotes
+\usepackage{perpage}
+\MakePerPage{footnote}
+% Works up to nine sidenotes
+\renewcommand*{\thefootnote}{\fnsymbol{footnote}}
+% Define up to 18 footnote symbols
+\makeatletter
+\def\@fnsymbol#1{%
+  \ensuremath{%
+    \ifcase#1\or
+      \dagger\or
+      \ddagger\or
+      *\or
+      \mathsection\or
+      \mathparagraph\or
+      \|\or
+      **\or
+      \dagger\dagger\or
+      \ddagger\ddagger\or
+      \mathsection\mathsection\or
+      \mathparagraph\mathparagraph\or
+      \|\|\or
+      ***\or
+      \dagger\dagger\dagger\or
+      \ddagger\ddagger\ddagger\or
+      \mathsection\mathsection\mathsection\or
+      \mathparagraph\mathparagraph\mathparagraph\or
+      \|\|\|
+    \else
+      % We've run out of footnote symbols for this page.
+      % We would normally emit an error here,
+      % but because the perpage package won't work until the
+      % second pass, we need to do something less abrupt.
+    \fi
+  }%
+}
+\makeatother
+
+
+
+% \renewcommand*{\thefootnote}{\alph{footnote}}
+
+%%for pictures in Ramsey theory section
+\newcounter{numint}
+
+
+
+% remove bullet
+% \def\labelitemi{}
+
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{2}
+
+% The default minimum amount of space between \marginnotes is 10 pt.
+\setlength\marginparpush{20pt}
+
+
+% \includeonly{chapters/ch1_sperner}
+% \includeonly{chapters/ch2_LO}
+% \includeonly{chapters/ch3_intersecting_hypergraphs}
+% \includeonly{chapters/ch4_shadows}
+% \includeonly{chapters/ch5_turan}
+% \includeonly{chapters/ch6_hypergraph_turan}
+% \includeonly{chapters/ch7_ramsey}
+% \includeonly{chapters/ch8_convexity}
+% \includeonly{chapters/ch9_incidence}
+
+
+\begin{document}
+\setuplayouts
+
+% \frontmatter
+
+\maketitle% this prints the handout title, author, and date
+
+% \mainmatter
+
+% \section{Introduction} \marginnote{Lecture 1: Thursday, Jan. 7, 2016.}
+
+Combinatorics is the study of finite discrete structures\sidenote{Say, collections of sets, or integers, or geometric sets.}. There are several subfields of combinatorics:
+\begin{itemize}
+  \item  Enumeratative combinatorics: try to understand how many objects exist with certain properties.
+  \item Extremal combinatorics: what are the largest or smallest objects with certain properties. This is what we will focus on in this class.
+\end{itemize}
+\begin{figure}
+\begin{center}
+\begin{tikzcd}
+\text{probability} \arrow[rd] & & \text{number theory}\\
+ & \text{combinatorics} \arrow[ru] \arrow[rd] & \\
+\text{algebra} \arrow[ru] & & \text{discrete geometry}
+\end{tikzcd}
+\end{center}
+\caption{The flow of combinatorial arguments. Probabalistic and algebraic tools are used in combinatorial arguments, which yields results in number theory and discrete geometry.}
+\end{figure}
+
+\tableofcontents
+
+% \listoftodos
+
+% \renewcommand\thesection{}
+\renewcommand\thesubsection{\Roman{section}.\Roman{subsection}}
+
+
+\input{chap_inputs}
+
+
+% \backmatter
+\clearpage
+\begin{fullwidth}
+\printbibliography[heading=fullbib]
+
+\printindex
+\end{fullwidth}
+
+\end{document}
