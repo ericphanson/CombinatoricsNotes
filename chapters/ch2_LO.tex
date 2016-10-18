@@ -110,7 +110,7 @@ What about $r= n-1$? $n-1$ chains, because it must start the collection of 1 ele
 
 What about $r= (n+1)-2i$? These are the symmetric chains which start at the $i$th level $[n]^{(i)}$ and go to the $n-i$th level $[n]^{(n-i)}$. The result is ${n\choose i} - {n\choose i-1}$. That is because there are ${n\choose i}$ elements in $[n]^{(i)}$, but ${n\choose i-1}$ of them are part of longer chains, the number of which is the number of elements in the level $[n]^{(i-1)}$.
 
-Let us formulate analogues of these ideas to solve the Littleword-Offord problem in $\R^d$.
+Let us formulate analogues of these ideas to solve the Littlewood-Offord problem in $\R^d$.
 \begin{theorem}[\cite{KLEITMAN1970}] \label{thm:kleit70}
 Let $(x_1,\dotsc,x_n)$ be vectors in $\R^d$, with $\|x_i\| \geq 1$. As before, define for $A\subset [n]$, $X_A = \sum_{i\in A} x_i$, and say that $\F\subset \P([n])$ is \defn{LO}[Littlewood-Offord!sets of vectors] with respect to $(x_1,\dotsc,x_n)$ if for each $A,B\in \F$, we have $\|X_A - X_B\| < 1$.
 Let $\F$ be LO with respect to $(x_1,\dotsc,x_n)$. Then $|\F| \leq { n\choose \floor{n/2}}$.
