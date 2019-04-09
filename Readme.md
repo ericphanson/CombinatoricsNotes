@@ -3,3 +3,5 @@ These are notes on extremal combinatorics from McGill University's Winter 2016 c
 If you find any typos, please let me know, or better yet, submit a pull request.
 
 I hope they are helpful!
+
+[![first page](CombinatoricsNotes.png)](CombinatoricsNotes.pdf)
