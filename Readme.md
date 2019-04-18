@@ -1,7 +1,6 @@
-These are notes on extremal combinatorics from McGill University's Winter 2016 class Math 550. 
+These are notes on extremal combinatorics from McGill University's Winter 2016 class Math 550. I hope they are helpful! 
 
-If you find any typos, please let me know, or better yet, submit a pull request.
+If you find any typos, please let me know, or better yet, submit a pull request. Thanks to Sage Kira for pointing out a typo.
 
-I hope they are helpful!
 
 [![first page](CombinatoricsNotes.png)](CombinatoricsNotes.pdf)

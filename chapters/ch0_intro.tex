@@ -30,12 +30,12 @@ Given $X$ with $|X| = n$, what is the maximum $|\F|$ with $\F\subset \P(X)$ inte
 \subsection*{Largest intersecting set system with fixed number of elements}
 How large can $\F$ intersecting be if $\F\subset X^{(r)}$ for some $r$? Our answer will depend on $r$ and $|X| = n$. Since $|X^{(r)}| = {n \choose r}$, that is an upper bound. When can we achieve it, i.e. when is $X^{(r)}$ intersecting? When $r > n/2$. In this case, every subset has more than half of the elements of $X$, so no two subsets can be disjoint.
 
-If $r = n/2$, then because of  complement pairing, the maximum is ${n \choose r}/2$. By choosing $\F$ as all of the sets that contain a particular element, we get ${n \choose r-1}$. So for $r=n/2$, we have
+If $r = n/2$, then because of  complement pairing, the maximum is ${n \choose r}/2$. By choosing $\F$ as all of the sets that contain a particular element, we get ${n -1\choose r-1}$. So for $r=n/2$, we have
 \[
- {n\choose r-1} \leq \max |\F| \leq \frac{1}{2}{n\choose r}.
+ {n-1\choose r-1} \leq \max |\F| \leq \frac{1}{2}{n\choose r}.
 \]
 But for $r=n/2$, these two bounds are equal\sidenote{Why? the LHS is the number of sets containing 1. But half of the sets contain 1 and half don't, by the complement argument.}.
-For $r< n/2$, the answer is ${n \choose r-1}$; this is a lower bound by selecting all sets containing a given element.  That this is an upper bound is the content of the following non-trivial theorem.
+For $r< n/2$, the answer is ${n -1 \choose r-1}$; this is a lower bound by selecting all sets containing a given element.  That this is an upper bound is the content of the following non-trivial theorem.
 \begin{theorem*}[\erdos-Ko-Rado] \marginnote{\fullcite{erdos-ko-rado-1961}}
 Let $r\leq n/2$. Let $\F\subset X^{(r)}$ with $|X| = n$ be intersecting. Then $|F| \leq { n-1\choose r-1}$.
 \end{theorem*}
